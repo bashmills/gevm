@@ -1,4 +1,4 @@
-# Godot Engine Version Manager - CONTRIBUTING
+# Godot Engine Version Manager (gevm) - CONTRIBUTING
 
 Contributions are welcome via pull requests. Not really expecting any contributions but this is still nice to have here for personal reference.
 

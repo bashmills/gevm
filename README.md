@@ -1,11 +1,11 @@
-# Godot Engine Version Manager - README
+# Godot Engine Version Manager (gevm) - README
 
-Welcome to the repository for Godot Engine Version Manager or gevm for short! This tool is built using [Go](https://go.dev/) and [InnoSetup](https://jrsoftware.org/isinfo.php). It allows for the downloading of [Godot Engine](https://godotengine.org/) from it's [GitHub](https://github.com/godotengine/godot-builds) repository via the terminal. We use it as part of our CI/CD pipeline for game development. It can also be used for personal use but we would recommend [Godots](https://github.com/MakovWait/godots) for that.
+Welcome to the repository for Godot Engine Version Manager! This tool is built using [Go](https://go.dev/) and [InnoSetup](https://jrsoftware.org/isinfo.php). It allows for the downloading of [Godot Engine](https://godotengine.org/) from it's [godot-builds](https://github.com/godotengine/godot-builds) repository via the terminal. We use it as part of our CI/CD pipeline for game development. It can also be used for personal use but we would recommend [Godots](https://github.com/MakovWait/godots) for that case.
 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [Uninstall](#uninstall)
+- [Uninstallation](#uninstallation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -47,10 +47,10 @@ Use the `list` command for listing available stable versions for your platform:
 gevm versions list --mono --all
 ```
 
-Additional optional flags include:
-
-- `--mono` to specify mono versions instead.
-- `--all` to also list non-stable releases.
+| Flag | Description |
+| --- | --- |
+| `--mono` | List the mono versions instead. |
+| `--all` | Also list non-stable releases. |
 
 ### `godot`
 
@@ -60,13 +60,13 @@ Install a version of godot using the `install` command:
 gevm godot install 4.3 --include-export-templates --release beta1 --mono --application --desktop
 ```
 
-Additional optional flags include:
-
-- `--include-export-templates` will additionally download and install the export templates for this version.
-- `--release` specifies a non-stable release to use.
-- `--mono` to specify the mono version of the engine.
-- `--application` will attempt to create an application shortcut (start menu, app menu, etc).
-- `--desktop` will attempt to create a desktop shortcut.
+| Flag | Description |
+| --- | --- |
+| `--include-export-templates` | Additionally download and install the export templates for this version. |
+| `--release` | Specify a non-stable release to use. |
+| `--mono` | Use the mono version. |
+| `--application` | Attempt to create an application shortcut (start menu, app menu, etc). |
+| `--desktop` | Attempt to create a desktop shortcut. |
 
 Uninstall a version by using the `uninstall` command:
 
@@ -96,9 +96,9 @@ This tool uses a download cache to making reinstalling versions quicker. You may
 gevm cache clear
 ```
 
-## Uninstall
+## Uninstallation
 
-The uninstallation process will not remove any installed versions of the engine or cached downloads. So you may want to uninstall any unwanted versions first and then also clear the cache to free up space:
+The uninstallation process will not remove any installed versions or cached downloads so you may want to that first to free up space:
 
 ```
 gevm godot list
@@ -123,7 +123,7 @@ rm -f ~/.local/bin/gevm
 
 ## Contributing
 
-See [contributing](CONTRIBUTING) for more details.
+See [contributing](CONTRIBUTING.md) for more details.
 
 ## License
 
