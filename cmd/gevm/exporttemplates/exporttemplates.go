@@ -9,8 +9,8 @@ import (
 
 type Download struct {
 	Version string `arg:"" help:"Export templates version to download to cache in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Download) Run(app *gevm.App) error {
@@ -24,8 +24,8 @@ func (c *Download) Run(app *gevm.App) error {
 
 type Uninstall struct {
 	Version string `arg:"" help:"Export templates version to uninstall in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Uninstall) Run(app *gevm.App) error {
@@ -39,8 +39,8 @@ func (c *Uninstall) Run(app *gevm.App) error {
 
 type Install struct {
 	Version string `arg:"" help:"Export templates version to download and install in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Install) Run(app *gevm.App) error {

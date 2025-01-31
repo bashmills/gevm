@@ -7,8 +7,8 @@ import (
 )
 
 type Detailed struct {
-	All  bool `help:"View all versions (otherwise only view stable versions)"`
-	Mono bool `help:"View mono versions"`
+	All  bool `short:"a" help:"View all versions (otherwise only view stable versions)"`
+	Mono bool `short:"m" help:"View mono versions"`
 }
 
 func (c *Detailed) Run(app *gevm.App) error {
@@ -21,8 +21,8 @@ func (c *Detailed) Run(app *gevm.App) error {
 }
 
 type List struct {
-	All  bool `help:"List all versions (otherwise only list stable versions)"`
-	Mono bool `help:"List mono versions"`
+	All  bool `short:"a" help:"List all versions (otherwise only list stable versions)"`
+	Mono bool `short:"m" help:"List mono versions"`
 }
 
 func (c *List) Run(app *gevm.App) error {

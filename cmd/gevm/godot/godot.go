@@ -9,9 +9,9 @@ import (
 
 type Download struct {
 	Version                string `arg:"" help:"Godot engine version to download to cache in the format x.x.x.x, x.x.x or x.x"`
-	IncludeExportTemplates bool   `help:"Include export templates in download"`
-	Release                string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono                   bool   `help:"Use mono version"`
+	IncludeExportTemplates bool   `short:"i" help:"Include export templates in download"`
+	Release                string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono                   bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Download) Run(app *gevm.App) error {
@@ -32,10 +32,10 @@ func (c *Download) Run(app *gevm.App) error {
 
 type Uninstall struct {
 	Version                string `arg:"" help:"Godot engine version to uninstall in the format x.x.x.x, x.x.x or x.x"`
-	ExcludeExportTemplates bool   `help:"Exclude export templates in uninstall"`
-	ExcludeShortcuts       bool   `help:"Exclude shortcuts in uninstall"`
-	Release                string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono                   bool   `help:"Use mono version"`
+	ExcludeExportTemplates bool   `short:"e" help:"Exclude export templates in uninstall"`
+	ExcludeShortcuts       bool   `short:"s" help:"Exclude shortcuts in uninstall"`
+	Release                string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono                   bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Uninstall) Run(app *gevm.App) error {
@@ -70,11 +70,11 @@ func (c *Uninstall) Run(app *gevm.App) error {
 
 type Install struct {
 	Version                string `arg:"" help:"Godot engine version to download and install in the format x.x.x.x, x.x.x or x.x"`
-	IncludeExportTemplates bool   `help:"Include export templates in install"`
-	Application            bool   `help:"Add application shortcut"`
-	Desktop                bool   `help:"Add desktop shortcut"`
-	Release                string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono                   bool   `help:"Use mono version"`
+	IncludeExportTemplates bool   `short:"i" help:"Include export templates in install"`
+	Application            bool   `short:"a" help:"Add application shortcut"`
+	Desktop                bool   `short:"d" help:"Add desktop shortcut"`
+	Release                string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono                   bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Install) Run(app *gevm.App) error {
@@ -108,8 +108,8 @@ func (c *Install) Run(app *gevm.App) error {
 
 type Use struct {
 	Version string `arg:"" help:"Godot engine version to use in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Use) Run(app *gevm.App) error {
@@ -123,8 +123,8 @@ func (c *Use) Run(app *gevm.App) error {
 
 type Path struct {
 	Version string `arg:"" help:"Godot engine version to use in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Path) Run(app *gevm.App) error {
