@@ -9,8 +9,8 @@ import (
 
 type Remove struct {
 	Version string `arg:"" help:"Desktop shortcut to remove in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Remove) Run(app *gevm.App) error {
@@ -24,8 +24,8 @@ func (c *Remove) Run(app *gevm.App) error {
 
 type Add struct {
 	Version string `arg:"" help:"Desktop shortcut to add in the format x.x.x.x, x.x.x or x.x"`
-	Release string `default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
-	Mono    bool   `help:"Use mono version"`
+	Release string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
+	Mono    bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Add) Run(app *gevm.App) error {
