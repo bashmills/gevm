@@ -25,7 +25,7 @@ var CLI struct {
 	Version         version.Version                 `cmd:"" help:"Print current version"`
 
 	ConfigPath string `help:"Override which config path to use"`
-	Verbose    bool   `help:"Use verbose debug logging"`
+	Verbose    bool   `short:"v" help:"Use verbose debug logging"`
 }
 
 func main() {
