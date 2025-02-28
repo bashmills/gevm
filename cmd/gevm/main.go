@@ -26,6 +26,7 @@ var CLI struct {
 
 	ConfigPath string `help:"Override which config path to use"`
 	Verbose    bool   `short:"v" help:"Use verbose debug logging"`
+	Quiet      bool   `short:"q" help:"Don't show progress"`
 }
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 	config, err := config.New(
 		config.OptionSetConfigPath(CLI.ConfigPath),
 		config.OptionSetVerbose(CLI.Verbose),
+		config.OptionSetQuiet(CLI.Quiet),
 	)
 	if err != nil {
 		log.Fatalf("failed to create config: %s", err)
