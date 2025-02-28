@@ -15,7 +15,7 @@ import (
 
 var ErrNotFound = errors.New("not found")
 
-func Download(url string, path string) error {
+func Download(url string, path string, quiet bool) error {
 	exists, err := utils.DoesExist(path)
 	if err != nil {
 		return fmt.Errorf("failed to check existence: %w", err)
@@ -37,6 +37,10 @@ func Download(url string, path string) error {
 		return fmt.Errorf("failed to parse header: %w", err)
 	}
 
+	if quiet {
+		utils.Printlnf("Downloading '%s'", filepath.Base(path))
+	}
+
 	progress := progressbar.NewOptions64(size,
 		progressbar.OptionSetDescription(fmt.Sprintf("Downloading '%s'", filepath.Base(path))),
 		progressbar.OptionSetWidth(20),
@@ -50,6 +54,7 @@ func Download(url string, path string) error {
 			BarStart:      "[",
 			BarEnd:        "]",
 		}),
+		progressbar.OptionSetVisibility(!quiet),
 	)
 
 	resp, err := http.Get(url)

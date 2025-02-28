@@ -55,7 +55,9 @@ func (s *Service) Download(semver semver.Semver) error {
 		utils.Printlnf("Downloading to: %s", archivePath)
 	}
 
-	err = downloading.Download(asset.DownloadURL, archivePath)
+	quiet := s.Config.Quiet
+
+	err = downloading.Download(asset.DownloadURL, archivePath, quiet)
 	if errors.Is(err, downloading.ErrNotFound) {
 		utils.Printlnf("Godot '%s' not found. Use 'gevm versions list' to see available versions.", semver.GodotString())
 		return nil
@@ -143,7 +145,9 @@ func (s *Service) Install(semver semver.Semver) error {
 		utils.Printlnf("Downloading to: %s", archivePath)
 	}
 
-	err = downloading.Download(asset.DownloadURL, archivePath)
+	quiet := s.Config.Quiet
+
+	err = downloading.Download(asset.DownloadURL, archivePath, quiet)
 	if errors.Is(err, downloading.ErrNotFound) {
 		utils.Printlnf("Godot '%s' not found. Use 'gevm versions list' to see available versions.", semver.GodotString())
 		return nil

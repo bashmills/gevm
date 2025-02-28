@@ -22,6 +22,7 @@ type Config struct {
 	ConfigPath string            `json:"-"`
 	Platform   platform.Platform `json:"-"`
 	Verbose    bool              `json:"-"`
+	Quiet      bool              `json:"-"`
 }
 
 func (c *Config) Reset() error {
@@ -198,5 +199,11 @@ func OptionSetConfigPath(configPath string) Option {
 func OptionSetVerbose(verbose bool) Option {
 	return func(config *Config) {
 		config.Verbose = verbose
+	}
+}
+
+func OptionSetQuiet(quiet bool) Option {
+	return func(config *Config) {
+		config.Quiet = quiet
 	}
 }
