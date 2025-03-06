@@ -25,7 +25,11 @@ You can use the very basic helper install script to download and install the Lin
 curl -o- https://raw.githubusercontent.com/bashidogames/gevm/master/install.sh | bash
 ```
 
-You will need to make sure `~/.local/bin` is in your `PATH` environment variable.
+You will need to make sure `~/.local/bin` is in your `PATH` environment variable:
+
+```
+export PATH="~/.local/bin:$PATH"
+```
 
 ### Manual
 
