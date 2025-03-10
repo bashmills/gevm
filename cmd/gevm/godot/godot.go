@@ -40,7 +40,7 @@ type Uninstall struct {
 
 func (c *Uninstall) Run(app *gevm.App) error {
 	if !c.ExcludeExportTemplates {
-		err := app.ExportTemplates.Uninstall(semver.Maybe(c.Version, c.Release, c.Mono), true)
+		err := app.ExportTemplates.Uninstall(semver.Maybe(c.Version, c.Release, c.Mono), false)
 		if err != nil {
 			return fmt.Errorf("cannot uninstall export templates: %w", err)
 		}
@@ -52,14 +52,14 @@ func (c *Uninstall) Run(app *gevm.App) error {
 	}
 
 	if !c.ExcludeShortcuts {
-		err := app.Shortcuts.Application.Remove(semver.Maybe(c.Version, c.Release, c.Mono), true)
+		err := app.Shortcuts.Application.Remove(semver.Maybe(c.Version, c.Release, c.Mono), false)
 		if err != nil {
 			return fmt.Errorf("cannot remove application shortcut: %w", err)
 		}
 	}
 
 	if !c.ExcludeShortcuts {
-		err := app.Shortcuts.Desktop.Remove(semver.Maybe(c.Version, c.Release, c.Mono), true)
+		err := app.Shortcuts.Desktop.Remove(semver.Maybe(c.Version, c.Release, c.Mono), false)
 		if err != nil {
 			return fmt.Errorf("cannot remove desktop shortcut: %w", err)
 		}
