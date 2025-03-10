@@ -12,7 +12,7 @@ func LocateExecutable(callback func(string) bool, root string, isDir bool) (stri
 	var result string
 	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return fmt.Errorf("could not walk path: %s", path)
+			return fmt.Errorf("could not walk path: %w", err)
 		}
 
 		if d.IsDir() != isDir {
