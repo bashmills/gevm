@@ -7,8 +7,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/bashidogames/gevm/internal/logging"
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/internal/utils"
+	"github.com/bashidogames/gevm/logger"
 )
 
 type Config struct {
@@ -21,14 +23,12 @@ type Config struct {
 
 	ConfigPath string            `json:"-"`
 	Platform   platform.Platform `json:"-"`
-	Verbose    bool              `json:"-"`
-	Quiet      bool              `json:"-"`
+	Logger     logger.Logger     `json:"-"`
+	Silent     bool              `json:"-"`
 }
 
 func (c *Config) Reset() error {
-	if c.Verbose {
-		utils.Printlnf("Attempting to reset config...")
-	}
+	c.Logger.Trace("Attempting to reset config...")
 
 	config, err := DefaultConfig()
 	if err != nil {
@@ -37,17 +37,13 @@ func (c *Config) Reset() error {
 
 	*c = *config
 
-	if c.Verbose {
-		utils.Printlnf("Config reset")
-	}
+	c.Logger.Trace("Config reset")
 
 	return nil
 }
 
 func (c *Config) Save() error {
-	if c.Verbose {
-		utils.Printlnf("Attempting to save config: %s", c.ConfigPath)
-	}
+	c.Logger.Trace("Attempting to save config: %s", c.ConfigPath)
 
 	err := os.MkdirAll(filepath.Dir(c.ConfigPath), utils.OS_DIRECTORY)
 	if err != nil {
@@ -70,17 +66,13 @@ func (c *Config) Save() error {
 		return fmt.Errorf("cannot write config: %w", err)
 	}
 
-	if c.Verbose {
-		utils.Printlnf("Config saved")
-	}
+	c.Logger.Trace("Config saved")
 
 	return nil
 }
 
 func (c *Config) load() error {
-	if c.Verbose {
-		utils.Printlnf("Attempting to load config: %s", c.ConfigPath)
-	}
+	c.Logger.Trace("Attempting to load config: %s", c.ConfigPath)
 
 	file, err := os.Open(c.ConfigPath)
 	if os.IsNotExist(err) {
@@ -101,9 +93,7 @@ func (c *Config) load() error {
 		return fmt.Errorf("cannot parse config: %w", err)
 	}
 
-	if c.Verbose {
-		utils.Printlnf("Config loaded")
-	}
+	c.Logger.Trace("Config loaded")
 
 	return nil
 }
@@ -149,6 +139,11 @@ func DefaultConfig() (*Config, error) {
 		return nil, fmt.Errorf("could not determine platform: %w", err)
 	}
 
+	logger, err := logging.New(logging.DEBUG)
+	if err != nil {
+		return nil, fmt.Errorf("could not create default logger: %w", err)
+	}
+
 	return &Config{
 		ExportTemplatesRootDirectory: defaultExportTemplatesRootDirectory,
 		GodotRootDirectory:           defaultGodotRootDirectory,
@@ -159,7 +154,8 @@ func DefaultConfig() (*Config, error) {
 
 		ConfigPath: configPath,
 		Platform:   platform,
-		Verbose:    false,
+		Logger:     logger,
+		Silent:     false,
 	}, nil
 }
 
@@ -196,14 +192,16 @@ func OptionSetConfigPath(configPath string) Option {
 	}
 }
 
-func OptionSetVerbose(verbose bool) Option {
+func OptionSetLogger(logger logger.Logger) Option {
 	return func(config *Config) {
-		config.Verbose = verbose
+		if logger != nil {
+			config.Logger = logger
+		}
 	}
 }
 
-func OptionSetQuiet(quiet bool) Option {
+func OptionSetSilent(silent bool) Option {
 	return func(config *Config) {
-		config.Quiet = quiet
+		config.Silent = silent
 	}
 }

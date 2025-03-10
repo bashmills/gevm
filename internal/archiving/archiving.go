@@ -8,16 +8,17 @@ import (
 	"path/filepath"
 
 	"github.com/bashidogames/gevm/internal/utils"
+	"github.com/bashidogames/gevm/logger"
 )
 
-func Unzip(from string, to string) error {
+func Unzip(logger logger.Logger, from string, to string) error {
 	reader, err := zip.OpenReader(from)
 	if err != nil {
 		return fmt.Errorf("could not open source file: %w", err)
 	}
 	defer reader.Close()
 
-	utils.Printlnf("Unzipping '%s'", filepath.Base(from))
+	logger.Debug("Unzipping '%s'", filepath.Base(from))
 
 	err = unzip(reader, to)
 	if err != nil {

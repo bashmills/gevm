@@ -10,19 +10,20 @@ import (
 	"strconv"
 
 	"github.com/bashidogames/gevm/internal/utils"
+	"github.com/bashidogames/gevm/logger"
 	"github.com/schollz/progressbar/v3"
 )
 
 var ErrNotFound = errors.New("not found")
 
-func Download(url string, path string, quiet bool) error {
+func Download(logger logger.Logger, url string, path string, silent bool) error {
 	exists, err := utils.DoesExist(path)
 	if err != nil {
 		return fmt.Errorf("failed to check existence: %w", err)
 	}
 
 	if exists {
-		utils.Printlnf("Cached '%s' found", filepath.Base(path))
+		logger.Debug("Cached '%s' found", filepath.Base(path))
 		return nil
 	}
 
@@ -37,12 +38,10 @@ func Download(url string, path string, quiet bool) error {
 		return fmt.Errorf("failed to parse header: %w", err)
 	}
 
-	if quiet {
-		utils.Printlnf("Downloading '%s'", filepath.Base(path))
-	}
+	logger.Debug("Downloading '%s'", filepath.Base(path))
 
 	progress := progressbar.NewOptions64(size,
-		progressbar.OptionSetDescription(fmt.Sprintf("Downloading '%s'", filepath.Base(path))),
+		progressbar.OptionSetDescription(fmt.Sprintf("'%s'", filepath.Base(path))),
 		progressbar.OptionSetWidth(20),
 		progressbar.OptionShowBytes(true),
 		progressbar.OptionShowElapsedTimeOnFinish(),
@@ -54,7 +53,7 @@ func Download(url string, path string, quiet bool) error {
 			BarStart:      "[",
 			BarEnd:        "]",
 		}),
-		progressbar.OptionSetVisibility(!quiet),
+		progressbar.OptionSetVisibility(!silent),
 	)
 
 	resp, err := http.Get(url)
