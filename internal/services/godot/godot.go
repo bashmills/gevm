@@ -10,7 +10,7 @@ import (
 	"github.com/bashidogames/gevm/internal/archiving"
 	"github.com/bashidogames/gevm/internal/downloading"
 	"github.com/bashidogames/gevm/internal/environment"
-	"github.com/bashidogames/gevm/internal/services/godot/fetcher"
+	"github.com/bashidogames/gevm/internal/locator"
 	"github.com/bashidogames/gevm/internal/utils"
 	"github.com/bashidogames/gevm/semver"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -20,7 +20,7 @@ const CACHE_FOLDER = "godot"
 
 type Service struct {
 	Environment *environment.Environment
-	Fetcher     *fetcher.Fetcher
+	Locator     *locator.Locator
 	Config      *config.Config
 }
 
@@ -155,7 +155,7 @@ func (s *Service) Install(semver semver.Semver) error {
 func (s *Service) Use(semver semver.Semver) error {
 	s.Config.Logger.Trace("Attempting to use '%s' godot...", semver.GodotString())
 
-	targetPath, err := s.Fetcher.TargetPath(semver)
+	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {
 		s.Config.Logger.Error("Godot '%s' not found. Use `gevm godot list` to see installed versions.", semver.GodotString())
 		return nil
@@ -164,7 +164,7 @@ func (s *Service) Use(semver semver.Semver) error {
 		return fmt.Errorf("cannot determine target path: %w", err)
 	}
 
-	linkPath := s.Fetcher.LinkPath(semver)
+	linkPath := s.Locator.LinkPath(semver)
 
 	s.Config.Logger.Trace("Creating godot symlink: %s => %s", linkPath, targetPath)
 
@@ -188,7 +188,7 @@ func (s *Service) Use(semver semver.Semver) error {
 }
 
 func (s *Service) Path(semver semver.Semver) error {
-	targetPath, err := s.Fetcher.TargetPath(semver)
+	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {
 		s.Config.Logger.Error("Godot '%s' not found. Use `gevm godot list` to see installed versions.", semver.GodotString())
 		return nil
@@ -247,11 +247,10 @@ func (s *Service) archivePath(name string) string {
 	return filepath.Join(s.Config.CacheDirectory, CACHE_FOLDER, name)
 }
 
-func New(environment *environment.Environment, config *config.Config) *Service {
-	fetcher := fetcher.New(config)
+func New(environment *environment.Environment, locator *locator.Locator, config *config.Config) *Service {
 	return &Service{
 		Environment: environment,
-		Fetcher:     fetcher,
+		Locator:     locator,
 		Config:      config,
 	}
 }

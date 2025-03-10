@@ -16,9 +16,9 @@ type Service struct {
 }
 
 func (s *Service) Detailed(all bool, mono bool) error {
-	repository, err := s.Environment.FetchRepository()
+	downloads, err := s.Environment.FetchDownloads(mono)
 	if err != nil {
-		return fmt.Errorf("cannot fetch repository: %w", err)
+		return fmt.Errorf("cannot fetch environment downloads: %w", err)
 	}
 
 	header := table.Row{"Version", "Release"}
@@ -29,25 +29,19 @@ func (s *Service) Detailed(all bool, mono bool) error {
 	t := table.NewWriter()
 	t.AppendHeader(header)
 
-	for _, relver := range repository.SortedDownloadKeys() {
-		if relver.Release.Original != "stable" && !all {
+	for _, download := range downloads {
+		if !download.Relver.IsStable() && !all {
 			continue
 		}
 
-		download := repository.Downloads[relver]
-
 		availabilities := map[platform.Platform]bool{}
 		for _, platform := range platform.Platforms {
-			if mono {
-				availabilities[platform] = download.HasMonoAsset(platform)
-			} else {
-				availabilities[platform] = download.HasAsset(platform)
-			}
+			availabilities[platform] = download.HasAsset(platform)
 		}
 
 		row := table.Row{
-			relver.Version,
-			relver.Release,
+			download.Relver.Version,
+			download.Relver.Release,
 		}
 
 		for _, platform := range platform.Platforms {
@@ -64,31 +58,23 @@ func (s *Service) Detailed(all bool, mono bool) error {
 }
 
 func (s *Service) List(all bool, mono bool) error {
-	repository, err := s.Environment.FetchRepository()
+	downloads, err := s.Environment.FetchDownloads(mono)
 	if err != nil {
-		return fmt.Errorf("cannot fetch repository: %w", err)
+		return fmt.Errorf("cannot fetch environment downloads: %w", err)
 	}
 
 	t := table.NewWriter()
 	t.AppendHeader(table.Row{"Version", "Release", s.Config.Platform})
 
-	for _, relver := range repository.SortedDownloadKeys() {
-		if relver.Release.Original != "stable" && !all {
+	for _, download := range downloads {
+		if !download.Relver.IsStable() && !all {
 			continue
 		}
 
-		download := repository.Downloads[relver]
-
-		var available bool
-		if mono {
-			available = download.HasMonoAsset(s.Config.Platform)
-		} else {
-			available = download.HasAsset(s.Config.Platform)
-		}
-
+		available := download.HasAsset(s.Config.Platform)
 		row := table.Row{
-			relver.Version,
-			relver.Release,
+			download.Relver.Version,
+			download.Relver.Release,
 			available,
 		}
 

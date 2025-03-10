@@ -14,12 +14,12 @@ import (
 )
 
 type Config struct {
-	ExportTemplatesRootDirectory string `json:"export-templates-root-directory,omitempty"`
-	GodotRootDirectory           string `json:"godot-root-directory,omitempty"`
-	ApplicationShortcutDirectory string `json:"application-shortcut-directory,omitempty"`
-	DesktopShortcutDirectory     string `json:"desktop-shortcut-directory,omitempty"`
-	CacheDirectory               string `json:"cache-directory,omitempty"`
-	BinDirectory                 string `json:"bin-directory,omitempty"`
+	ExportTemplatesRootDirectory string `json:"export-templates-root-directory"`
+	GodotRootDirectory           string `json:"godot-root-directory"`
+	ApplicationShortcutDirectory string `json:"application-shortcut-directory"`
+	DesktopShortcutDirectory     string `json:"desktop-shortcut-directory"`
+	CacheDirectory               string `json:"cache-directory"`
+	BinDirectory                 string `json:"bin-directory"`
 
 	ConfigPath string            `json:"-"`
 	Platform   platform.Platform `json:"-"`

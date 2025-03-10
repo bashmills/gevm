@@ -2,7 +2,9 @@ package environment
 
 import (
 	"fmt"
+	"slices"
 
+	"github.com/bashidogames/gevm/config"
 	"github.com/bashidogames/gevm/internal/environment/fetcher"
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/internal/repository"
@@ -11,10 +13,11 @@ import (
 
 type Environment struct {
 	Fetcher fetcher.Fetcher
+	Config  *config.Config
 }
 
 func (e *Environment) FetchExportTemplatesAsset(semver semver.Semver) (*repository.Asset, error) {
-	asset, err := e.Fetcher.FetchExportTemplatesAsset(semver)
+	asset, err := e.Fetcher.FetchAsset(platform.ExportTemplates, semver)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch export templates asset: %w", err)
 	}
@@ -23,7 +26,7 @@ func (e *Environment) FetchExportTemplatesAsset(semver semver.Semver) (*reposito
 }
 
 func (e *Environment) FetchGodotAsset(semver semver.Semver) (*repository.Asset, error) {
-	asset, err := e.Fetcher.FetchGodotAsset(semver)
+	asset, err := e.Fetcher.FetchAsset(e.Config.Platform, semver)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch godot asset: %w", err)
 	}
@@ -31,38 +34,20 @@ func (e *Environment) FetchGodotAsset(semver semver.Semver) (*repository.Asset, 
 	return asset, nil
 }
 
-func (e *Environment) FetchRepository() (*repository.Repository, error) {
-	result := repository.Repository{
-		Downloads: map[semver.Relver]repository.Download{},
-	}
-
-	err := e.Fetcher.FetchRepository(func(entry *fetcher.Entry) error {
-		download, ok := result.Downloads[entry.Relver]
-		if !ok {
-			download = repository.Download{
-				MonoAssets: map[platform.Platform]repository.Asset{},
-				Assets:     map[platform.Platform]repository.Asset{},
-			}
-		}
-
-		if entry.Mono {
-			download.MonoAssets[entry.Platform] = entry.Asset
-		} else {
-			download.Assets[entry.Platform] = entry.Asset
-		}
-
-		result.Downloads[entry.Relver] = download
-		return nil
-	})
+func (e *Environment) FetchDownloads(mono bool) ([]repository.Download, error) {
+	downloads, err := e.Fetcher.FetchDownloads(mono)
 	if err != nil {
-		return nil, fmt.Errorf("failed to fetch repository: %w", err)
+		return nil, fmt.Errorf("failed to fetch downloads: %w", err)
 	}
 
-	return &result, nil
+	slices.SortFunc(downloads, func(a repository.Download, b repository.Download) int { return a.Relver.Compare(b.Relver) })
+
+	return downloads, nil
 }
 
-func New(fetcher fetcher.Fetcher) (*Environment, error) {
+func New(fetcher fetcher.Fetcher, config *config.Config) (*Environment, error) {
 	return &Environment{
 		Fetcher: fetcher,
+		Config:  config,
 	}, nil
 }
