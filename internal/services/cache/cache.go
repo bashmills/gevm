@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/utils"
 )
 
 type Service struct {
@@ -13,16 +12,14 @@ type Service struct {
 }
 
 func (s *Service) Clear() error {
-	if s.Config.Verbose {
-		utils.Printlnf("Attempting to clear cache directory: %s", s.Config.CacheDirectory)
-	}
+	s.Config.Logger.Trace("Attempting to clear cache directory: %s", s.Config.CacheDirectory)
 
 	err := os.RemoveAll(s.Config.CacheDirectory)
 	if err != nil {
 		return fmt.Errorf("cannot remove cache directory: %w", err)
 	}
 
-	utils.Printlnf("Cache cleared")
+	s.Config.Logger.Info("Cache cleared")
 	return nil
 }
 

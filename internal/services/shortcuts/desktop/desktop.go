@@ -1,6 +1,7 @@
 package desktop
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -17,15 +18,11 @@ type Service struct {
 }
 
 func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
-	if s.Config.Verbose {
-		utils.Printlnf("Attempting to remove '%s' desktop shortcut...", semver.GodotString())
-	}
+	s.Config.Logger.Trace("Attempting to remove '%s' desktop shortcut...", semver.GodotString())
 
 	shortcutPath := s.Fetcher.DesktopShortcutPath(semver)
 
-	if s.Config.Verbose {
-		utils.Printlnf("Removing desktop shortcut: %s", shortcutPath)
-	}
+	s.Config.Logger.Trace("Removing desktop shortcut: %s", shortcutPath)
 
 	exists, err := utils.DoesExist(shortcutPath)
 	if err != nil {
@@ -34,7 +31,7 @@ func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
 
 	if !exists {
 		if logMissing {
-			utils.Printlnf("Desktop shortcut '%s' not found", semver.GodotString())
+			s.Config.Logger.Error("Desktop shortcut '%s' not found", semver.GodotString())
 		}
 
 		return nil
@@ -45,16 +42,18 @@ func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
 		return fmt.Errorf("cannot remove shortcut: %w", err)
 	}
 
-	utils.Printlnf("Desktop '%s' shortcut removed", semver.GodotString())
+	s.Config.Logger.Info("Desktop '%s' shortcut removed", semver.GodotString())
 	return nil
 }
 
 func (s *Service) Add(semver semver.Semver) error {
-	if s.Config.Verbose {
-		utils.Printlnf("Attempting to add '%s' desktop shortcut...", semver.GodotString())
-	}
+	s.Config.Logger.Trace("Attempting to add '%s' desktop shortcut...", semver.GodotString())
 
 	targetPath, err := s.Fetcher.TargetPath(semver)
+	if errors.Is(err, os.ErrNotExist) {
+		s.Config.Logger.Error("Godot '%s' not found. Use `gevm godot list` to see installed versions.", semver.GodotString())
+		return nil
+	}
 	if err != nil {
 		return fmt.Errorf("cannot determine target path: %w", err)
 	}
@@ -62,9 +61,7 @@ func (s *Service) Add(semver semver.Semver) error {
 	shortcutPath := s.Fetcher.DesktopShortcutPath(semver)
 	shortcutName := s.Fetcher.ShortcutName(semver)
 
-	if s.Config.Verbose {
-		utils.Printlnf("Adding '%s' desktop shortcut: %s => %s", shortcutName, shortcutPath, targetPath)
-	}
+	s.Config.Logger.Trace("Adding '%s' desktop shortcut: %s => %s", shortcutName, shortcutPath, targetPath)
 
 	exists, err := utils.DoesExist(shortcutPath)
 	if err != nil {
@@ -72,7 +69,7 @@ func (s *Service) Add(semver semver.Semver) error {
 	}
 
 	if exists {
-		utils.Printlnf("Desktop shortcut '%s' already added", semver.GodotString())
+		s.Config.Logger.Info("Desktop shortcut '%s' already added", semver.GodotString())
 		return nil
 	}
 
@@ -81,7 +78,7 @@ func (s *Service) Add(semver semver.Semver) error {
 		return fmt.Errorf("cannot create shortcut: %w", err)
 	}
 
-	utils.Printlnf("Desktop '%s' shortcut added", semver.GodotString())
+	s.Config.Logger.Info("Desktop '%s' shortcut added", semver.GodotString())
 	return nil
 }
 

@@ -15,7 +15,6 @@ import (
 	"github.com/bashidogames/gevm/internal/environment/fetcher/github/mappings"
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/internal/repository"
-	"github.com/bashidogames/gevm/internal/utils"
 	"github.com/bashidogames/gevm/semver"
 )
 
@@ -52,9 +51,7 @@ func (g *Github) FetchRepository(callback func(entry *fetcher.Entry) error) erro
 	var datas []Data
 
 	for {
-		if g.Config.Verbose {
-			utils.Printlnf("Fetching data from url: %s", url)
-		}
+		g.Config.Logger.Trace("Fetching data from url: %s", url)
 
 		err := downloading.Fetch(url, func(header http.Header, bytes []byte) error {
 			var data []Data
@@ -127,9 +124,7 @@ func (g *Github) FetchRepository(callback func(entry *fetcher.Entry) error) erro
 }
 
 func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*repository.Asset, error) {
-	if g.Config.Verbose {
-		utils.Printlnf("Fetching '%s' assets for platform: %s", semver.Relver.GodotString(), platform)
-	}
+	g.Config.Logger.Trace("Fetching '%s' assets for platform: %s", semver.Relver.GodotString(), platform)
 
 	mapping, ok := mappings.Mappings[platform]
 	if !ok {
@@ -139,9 +134,7 @@ func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*
 	url := fmt.Sprintf(ASSET_URL, semver.Relver.GodotString())
 	var data Data
 
-	if g.Config.Verbose {
-		utils.Printlnf("Fetching assets from url: %s", url)
-	}
+	g.Config.Logger.Trace("Fetching assets from url: %s", url)
 
 	err := downloading.Fetch(url, func(header http.Header, bytes []byte) error {
 		err := json.Unmarshal(bytes, &data)
@@ -164,36 +157,28 @@ func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*
 		}
 
 		mono := len(parts[1]) > 0
-		if semver.Mono != mono {
-			if g.Config.Verbose {
-				utils.Printlnf("Asset not matched: %s", asset.Name)
-			}
-
-			continue
-		}
-
 		system := parts[2]
 		arch := parts[4]
 
 		if slices.Index(mapping.System, system) < 0 {
-			if g.Config.Verbose {
-				utils.Printlnf("Asset matched but invalid system: %s", asset.Name)
-			}
+			g.Config.Logger.Trace("Invalid system for asset: %s", asset.Name)
 
 			continue
 		}
 
 		if slices.Index(mapping.Arch, arch) < 0 {
-			if g.Config.Verbose {
-				utils.Printlnf("Asset matched but invalid arch: %s", asset.Name)
-			}
+			g.Config.Logger.Trace("Invalid arch for asset: %s", asset.Name)
 
 			continue
 		}
 
-		if g.Config.Verbose {
-			utils.Printlnf("Asset found: %s", asset.Name)
+		if semver.Mono != mono {
+			g.Config.Logger.Trace("Invalid mono for asset: %s", asset.Name)
+
+			continue
 		}
+
+		g.Config.Logger.Trace("Asset found: %s", asset.Name)
 
 		assets = append(assets, repository.Asset{
 			DownloadURL: asset.DownloadURL,

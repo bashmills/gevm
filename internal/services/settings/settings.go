@@ -1,6 +1,7 @@
 package settings
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -8,6 +9,8 @@ import (
 	"github.com/bashidogames/gevm/config"
 	"github.com/bashidogames/gevm/internal/utils"
 )
+
+var ErrNotFound = errors.New("not found")
 
 type Service struct {
 	Config *config.Config
@@ -24,7 +27,7 @@ func (s *Service) Reset() error {
 		return fmt.Errorf("cannot save config: %w", err)
 	}
 
-	utils.Printlnf("Settings reset")
+	s.Config.Logger.Info("Settings reset")
 	return nil
 }
 
@@ -46,6 +49,10 @@ func (s *Service) Set(key string, value string) error {
 		field.SetString(value)
 		return nil
 	})
+	if err == ErrNotFound {
+		s.Config.Logger.Error("Settings key '%s' not found. Use 'gevm settings list' to see available settings.", key)
+		return nil
+	}
 	if err != nil {
 		return fmt.Errorf("failed to find field: %w", err)
 	}
@@ -63,6 +70,10 @@ func (s *Service) Get(key string) error {
 		utils.Printlnf("%s = %s", name, field.String())
 		return nil
 	})
+	if err == ErrNotFound {
+		s.Config.Logger.Error("Settings key '%s' not found. Use 'gevm settings list' to see available settings.", key)
+		return nil
+	}
 	if err != nil {
 		return fmt.Errorf("failed to find field: %w", err)
 	}
@@ -115,7 +126,7 @@ func (s *Service) findField(key string, callback func(reflect.Value, string) err
 	}
 
 	if !found {
-		return fmt.Errorf("unknown config key: %s", key)
+		return ErrNotFound
 	}
 
 	return nil
