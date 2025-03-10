@@ -7,14 +7,6 @@ import (
 )
 
 type Fetcher interface {
-	FetchExportTemplatesAsset(semver semver.Semver) (*repository.Asset, error)
-	FetchGodotAsset(semver semver.Semver) (*repository.Asset, error)
-	FetchRepository(func(entry *Entry) error) error
-}
-
-type Entry struct {
-	Platform platform.Platform
-	Relver   semver.Relver
-	Asset    repository.Asset
-	Mono     bool
+	FetchAsset(platform platform.Platform, semver semver.Semver) (*repository.Asset, error)
+	FetchDownloads(mono bool) ([]repository.Download, error)
 }

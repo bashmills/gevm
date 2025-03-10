@@ -1,34 +1,13 @@
 package repository
 
 import (
-	"slices"
-
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/semver"
 )
 
-type Repository struct {
-	Downloads map[semver.Relver]Download
-}
-
-func (r Repository) SortedDownloadKeys() []semver.Relver {
-	var keys []semver.Relver
-	for key := range r.Downloads {
-		keys = append(keys, key)
-	}
-
-	slices.SortStableFunc(keys, func(a semver.Relver, b semver.Relver) int { return a.Compare(b) })
-
-	return keys
-}
-
 type Download struct {
-	MonoAssets map[platform.Platform]Asset
-	Assets     map[platform.Platform]Asset
-}
-
-func (d Download) HasMonoAsset(platform platform.Platform) bool {
-	return d.MonoAssets[platform].IsValid()
+	Assets map[platform.Platform]Asset
+	Relver semver.Relver
 }
 
 func (d Download) HasAsset(platform platform.Platform) bool {

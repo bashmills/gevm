@@ -6,21 +6,21 @@ import (
 	"os"
 
 	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/services/shortcuts/fetcher"
+	"github.com/bashidogames/gevm/internal/locator"
 	"github.com/bashidogames/gevm/internal/shortcut"
 	"github.com/bashidogames/gevm/internal/utils"
 	"github.com/bashidogames/gevm/semver"
 )
 
 type Service struct {
-	Fetcher *fetcher.Fetcher
+	Locator *locator.Locator
 	Config  *config.Config
 }
 
 func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
 	s.Config.Logger.Trace("Attempting to remove '%s' desktop shortcut...", semver.GodotString())
 
-	shortcutPath := s.Fetcher.DesktopShortcutPath(semver)
+	shortcutPath := s.Locator.DesktopShortcutPath(semver)
 
 	s.Config.Logger.Trace("Removing desktop shortcut: %s", shortcutPath)
 
@@ -49,7 +49,7 @@ func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
 func (s *Service) Add(semver semver.Semver) error {
 	s.Config.Logger.Trace("Attempting to add '%s' desktop shortcut...", semver.GodotString())
 
-	targetPath, err := s.Fetcher.TargetPath(semver)
+	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {
 		s.Config.Logger.Error("Godot '%s' not found. Use `gevm godot list` to see installed versions.", semver.GodotString())
 		return nil
@@ -58,8 +58,8 @@ func (s *Service) Add(semver semver.Semver) error {
 		return fmt.Errorf("cannot determine target path: %w", err)
 	}
 
-	shortcutPath := s.Fetcher.DesktopShortcutPath(semver)
-	shortcutName := s.Fetcher.ShortcutName(semver)
+	shortcutPath := s.Locator.DesktopShortcutPath(semver)
+	shortcutName := s.Locator.ShortcutName(semver)
 
 	s.Config.Logger.Trace("Adding '%s' desktop shortcut: %s => %s", shortcutName, shortcutPath, targetPath)
 
@@ -82,9 +82,9 @@ func (s *Service) Add(semver semver.Semver) error {
 	return nil
 }
 
-func New(fetcher *fetcher.Fetcher, config *config.Config) *Service {
+func New(locator *locator.Locator, config *config.Config) *Service {
 	return &Service{
-		Fetcher: fetcher,
+		Locator: locator,
 		Config:  config,
 	}
 }

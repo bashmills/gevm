@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"slices"
 
 	"github.com/bashidogames/gevm/internal/utils"
 )
@@ -20,6 +21,10 @@ var RelverRegex = regexp.MustCompile(RELVER_REGEX_PATTERN)
 var SemverRegex = regexp.MustCompile(SEMVER_REGEX_PATTERN)
 
 var ErrRegexFailed = errors.New("regex failed")
+
+var StableLabels = []string{
+	"stable",
+}
 
 var Labels = map[string]int{
 	"dev":    1,
@@ -163,6 +168,10 @@ func (a Release) Equal(b Release) bool {
 	return a.Compare(b) == 0
 }
 
+func (r Release) IsStable() bool {
+	return slices.Contains(StableLabels, r.Original)
+}
+
 func (r Release) String() string {
 	return r.Original
 }
@@ -232,6 +241,10 @@ func (a Relver) Less(b Relver) bool {
 
 func (a Relver) Equal(b Relver) bool {
 	return a.Compare(b) == 0
+}
+
+func (a Relver) IsStable() bool {
+	return a.Release.IsStable()
 }
 
 func (vr Relver) ExportTemplatesString() string {
@@ -311,6 +324,10 @@ func (a Semver) Less(b Semver) bool {
 
 func (a Semver) Equal(b Semver) bool {
 	return a.Compare(b) == 0
+}
+
+func (a Semver) IsStable() bool {
+	return a.Relver.IsStable()
 }
 
 func (s Semver) ExportTemplatesString() string {

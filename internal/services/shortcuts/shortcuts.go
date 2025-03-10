@@ -2,9 +2,9 @@ package shortcuts
 
 import (
 	"github.com/bashidogames/gevm/config"
+	"github.com/bashidogames/gevm/internal/locator"
 	"github.com/bashidogames/gevm/internal/services/shortcuts/application"
 	"github.com/bashidogames/gevm/internal/services/shortcuts/desktop"
-	"github.com/bashidogames/gevm/internal/services/shortcuts/fetcher"
 )
 
 type Service struct {
@@ -12,10 +12,9 @@ type Service struct {
 	Desktop     *desktop.Service
 }
 
-func New(config *config.Config) *Service {
-	fetcher := fetcher.New(config)
+func New(locator *locator.Locator, config *config.Config) *Service {
 	return &Service{
-		Application: application.New(fetcher, config),
-		Desktop:     desktop.New(fetcher, config),
+		Application: application.New(locator, config),
+		Desktop:     desktop.New(locator, config),
 	}
 }

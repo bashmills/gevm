@@ -11,8 +11,7 @@ import (
 
 	"github.com/bashidogames/gevm/config"
 	"github.com/bashidogames/gevm/internal/downloading"
-	"github.com/bashidogames/gevm/internal/environment/fetcher"
-	"github.com/bashidogames/gevm/internal/environment/fetcher/github/mappings"
+	"github.com/bashidogames/gevm/internal/environment/github/mappings"
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/internal/repository"
 	"github.com/bashidogames/gevm/semver"
@@ -38,92 +37,7 @@ type Data struct {
 	} `json:"assets"`
 }
 
-func (g *Github) FetchExportTemplatesAsset(semver semver.Semver) (*repository.Asset, error) {
-	return g.fetchAsset(platform.ExportTemplates, semver)
-}
-
-func (g *Github) FetchGodotAsset(semver semver.Semver) (*repository.Asset, error) {
-	return g.fetchAsset(g.Config.Platform, semver)
-}
-
-func (g *Github) FetchRepository(callback func(entry *fetcher.Entry) error) error {
-	url := REPOSITORY_URL
-	var datas []Data
-
-	for {
-		g.Config.Logger.Trace("Fetching data from url: %s", url)
-
-		err := downloading.Fetch(url, func(header http.Header, bytes []byte) error {
-			var data []Data
-			err := json.Unmarshal(bytes, &data)
-			if err != nil {
-				return fmt.Errorf("cannot parse bytes: %w", err)
-			}
-
-			datas = append(datas, data...)
-			link := header.Get("link")
-
-			parts := NextRegex.FindStringSubmatch(link)
-			if len(parts) == 0 {
-				return io.EOF
-			}
-
-			url = parts[1]
-			return nil
-		})
-		if errors.Is(err, io.EOF) {
-			break
-		}
-		if err != nil {
-			return fmt.Errorf("fetch failed: %w", err)
-		}
-	}
-
-	for _, data := range datas {
-		relver, err := semver.ParseRelver(data.Name)
-		if err != nil {
-			return fmt.Errorf("could not parse version release: %w", err)
-		}
-
-		for platform, mapping := range mappings.Mappings {
-			for _, asset := range data.Assets {
-				parts := AssetRegex.FindStringSubmatch(asset.Name)
-				if len(parts) == 0 {
-					continue
-				}
-
-				mono := len(parts[1]) > 0
-				system := parts[2]
-				arch := parts[4]
-
-				if slices.Index(mapping.System, system) < 0 {
-					continue
-				}
-
-				if slices.Index(mapping.Arch, arch) < 0 {
-					continue
-				}
-
-				err := callback(&fetcher.Entry{
-					Platform: platform,
-					Relver:   relver,
-					Asset: repository.Asset{
-						DownloadURL: asset.DownloadURL,
-						Name:        asset.Name,
-					},
-					Mono: mono,
-				})
-				if err != nil {
-					return fmt.Errorf("repository callback failed: %w", err)
-				}
-			}
-		}
-	}
-
-	return nil
-}
-
-func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*repository.Asset, error) {
+func (g *Github) FetchAsset(platform platform.Platform, semver semver.Semver) (*repository.Asset, error) {
 	g.Config.Logger.Trace("Fetching '%s' assets for platform: %s", semver.Relver.GodotString(), platform)
 
 	mapping, ok := mappings.Mappings[platform]
@@ -156,25 +70,22 @@ func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*
 			continue
 		}
 
-		mono := len(parts[1]) > 0
+		isMono := len(parts[1]) > 0
 		system := parts[2]
 		arch := parts[4]
 
 		if slices.Index(mapping.System, system) < 0 {
 			g.Config.Logger.Trace("Invalid system for asset: %s", asset.Name)
-
 			continue
 		}
 
 		if slices.Index(mapping.Arch, arch) < 0 {
 			g.Config.Logger.Trace("Invalid arch for asset: %s", asset.Name)
-
 			continue
 		}
 
-		if semver.Mono != mono {
+		if semver.Mono != isMono {
 			g.Config.Logger.Trace("Invalid mono for asset: %s", asset.Name)
-
 			continue
 		}
 
@@ -195,6 +106,88 @@ func (g *Github) fetchAsset(platform platform.Platform, semver semver.Semver) (*
 	}
 
 	return &assets[0], nil
+}
+
+func (g *Github) FetchDownloads(mono bool) ([]repository.Download, error) {
+	url := REPOSITORY_URL
+	var datas []Data
+
+	for {
+		g.Config.Logger.Trace("Fetching data from url: %s", url)
+
+		err := downloading.Fetch(url, func(header http.Header, bytes []byte) error {
+			var data []Data
+			err := json.Unmarshal(bytes, &data)
+			if err != nil {
+				return fmt.Errorf("cannot parse bytes: %w", err)
+			}
+
+			datas = append(datas, data...)
+			link := header.Get("link")
+
+			parts := NextRegex.FindStringSubmatch(link)
+			if len(parts) == 0 {
+				return io.EOF
+			}
+
+			url = parts[1]
+			return nil
+		})
+		if !errors.Is(err, io.EOF) && err != nil {
+			return nil, fmt.Errorf("fetch failed: %w", err)
+		}
+		if err != nil {
+			break
+		}
+	}
+
+	var downloads []repository.Download
+
+	for _, data := range datas {
+		relver, err := semver.ParseRelver(data.Name)
+		if err != nil {
+			return nil, fmt.Errorf("could not parse version release: %w", err)
+		}
+
+		download := repository.Download{
+			Assets: map[platform.Platform]repository.Asset{},
+			Relver: relver,
+		}
+
+		for platform, mapping := range mappings.Mappings {
+			for _, asset := range data.Assets {
+				parts := AssetRegex.FindStringSubmatch(asset.Name)
+				if len(parts) == 0 {
+					continue
+				}
+
+				isMono := len(parts[1]) > 0
+				system := parts[2]
+				arch := parts[4]
+
+				if slices.Index(mapping.System, system) < 0 {
+					continue
+				}
+
+				if slices.Index(mapping.Arch, arch) < 0 {
+					continue
+				}
+
+				if isMono != mono {
+					continue
+				}
+
+				download.Assets[platform] = repository.Asset{
+					DownloadURL: asset.DownloadURL,
+					Name:        asset.Name,
+				}
+			}
+		}
+
+		downloads = append(downloads, download)
+	}
+
+	return downloads, nil
 }
 
 func New(config *config.Config) *Github {
