@@ -133,11 +133,11 @@ func (g *Github) FetchDownloads(mono bool) ([]repository.Download, error) {
 			url = parts[1]
 			return nil
 		})
-		if !errors.Is(err, io.EOF) && err != nil {
-			return nil, fmt.Errorf("fetch failed: %w", err)
+		if errors.Is(err, io.EOF) {
+			break
 		}
 		if err != nil {
-			break
+			return nil, fmt.Errorf("fetch failed: %w", err)
 		}
 	}
 

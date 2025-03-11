@@ -1,10 +1,12 @@
 package environment
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 
 	"github.com/bashidogames/gevm/config"
+	"github.com/bashidogames/gevm/internal/downloading"
 	"github.com/bashidogames/gevm/internal/environment/fetcher"
 	"github.com/bashidogames/gevm/internal/platform"
 	"github.com/bashidogames/gevm/internal/repository"
@@ -12,42 +14,81 @@ import (
 )
 
 type Environment struct {
-	Fetcher fetcher.Fetcher
-	Config  *config.Config
+	Fetchers []fetcher.Fetcher
+	Config   *config.Config
 }
 
 func (e *Environment) FetchExportTemplatesAsset(semver semver.Semver) (*repository.Asset, error) {
-	asset, err := e.Fetcher.FetchAsset(platform.ExportTemplates, semver)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch export templates asset: %w", err)
+	var result *repository.Asset
+	for _, fetcher := range e.Fetchers {
+		asset, err := fetcher.FetchAsset(platform.ExportTemplates, semver)
+		if errors.Is(err, downloading.ErrNotFound) {
+			continue
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch export templates asset: %w", err)
+		}
+
+		result = asset
+		break
 	}
 
-	return asset, nil
+	if result == nil {
+		return nil, downloading.ErrNotFound
+	}
+
+	return result, nil
 }
 
 func (e *Environment) FetchGodotAsset(semver semver.Semver) (*repository.Asset, error) {
-	asset, err := e.Fetcher.FetchAsset(e.Config.Platform, semver)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch godot asset: %w", err)
+	var result *repository.Asset
+	for _, fetcher := range e.Fetchers {
+		asset, err := fetcher.FetchAsset(e.Config.Platform, semver)
+		if errors.Is(err, downloading.ErrNotFound) {
+			continue
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch godot asset: %w", err)
+		}
+
+		result = asset
+		break
 	}
 
-	return asset, nil
+	if result == nil {
+		return nil, downloading.ErrNotFound
+	}
+
+	return result, nil
 }
 
 func (e *Environment) FetchDownloads(mono bool) ([]repository.Download, error) {
-	downloads, err := e.Fetcher.FetchDownloads(mono)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch downloads: %w", err)
+	var result []repository.Download
+	for _, fetcher := range e.Fetchers {
+		downloads, err := fetcher.FetchDownloads(mono)
+		if errors.Is(err, downloading.ErrNotFound) {
+			continue
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to fetch downloads: %w", err)
+		}
+
+		result = downloads
+		break
 	}
 
-	slices.SortFunc(downloads, func(a repository.Download, b repository.Download) int { return a.Relver.Compare(b.Relver) })
+	if result == nil {
+		return nil, downloading.ErrNotFound
+	}
 
-	return downloads, nil
+	slices.SortFunc(result, func(a repository.Download, b repository.Download) int { return a.Relver.Compare(b.Relver) })
+
+	return result, nil
 }
 
-func New(fetcher fetcher.Fetcher, config *config.Config) (*Environment, error) {
+func New(fetchers []fetcher.Fetcher, config *config.Config) (*Environment, error) {
 	return &Environment{
-		Fetcher: fetcher,
-		Config:  config,
+		Fetchers: fetchers,
+		Config:   config,
 	}, nil
 }
