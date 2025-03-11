@@ -5,6 +5,7 @@ import (
 
 	"github.com/bashidogames/gevm/config"
 	"github.com/bashidogames/gevm/internal/environment"
+	"github.com/bashidogames/gevm/internal/environment/fetcher"
 	"github.com/bashidogames/gevm/internal/environment/github"
 	"github.com/bashidogames/gevm/internal/locator"
 	"github.com/bashidogames/gevm/internal/services/cache"
@@ -25,7 +26,7 @@ type App struct {
 }
 
 func New(config *config.Config) (*App, error) {
-	environment, err := environment.New(github.New(config), config)
+	environment, err := environment.New([]fetcher.Fetcher{github.New(config)}, config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create environment: %w", err)
 	}
