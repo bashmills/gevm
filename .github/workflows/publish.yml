@@ -1,80 +1,80 @@
 name: Publish Project
 on:
-    workflow_dispatch: {}
-    push:
-        tags:
-            - '**'
+  workflow_dispatch: {}
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 jobs:
-    build:
-        strategy:
-            fail-fast: false
-            matrix:
-                os: ['windows', 'linux']
-                arch: ['amd64', '386']
-        runs-on: ubuntu-latest
-        name: Building ${{ matrix.os }}-${{ matrix.arch }}
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-            - name: Setup Go
-              uses: actions/setup-go@v5
-              with:
-                go-version-file: go.mod
-            - name: Build Project
-              run: go build -o ./build/ -ldflags "-X github.com/bashidogames/gevm/cmd/gevm/version.version=${{ github.ref_name }}" ./cmd/gevm
-              env:
-                GOARCH: ${{ matrix.arch }}
-                GOOS: ${{ matrix.os }}
-            - name: Archive Build
-              run: cd build && zip ../gevm-${{ matrix.os }}-${{ matrix.arch }}.zip * && cd ..
-            - name: Upload Artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                path: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
-                name: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
-                if-no-files-found: error
-                retention-days: 1
-    windows:
-        needs: build
-        strategy:
-            fail-fast: false
-            matrix:
-                arch: ['amd64', '386']
-                os: ['windows']
-        runs-on: windows-latest
-        name: Packaging ${{ matrix.os }}-${{ matrix.arch }}
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-            - name: Download Artifacts
-              uses: actions/download-artifact@v4
-              with:
-                name: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
-            - name: Extract Build
-              run: 7z x gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
-            - name: Package Build
-              run: iscc /dMyAppVersion=${{ github.ref_name }} package-${{ matrix.os }}-${{ matrix.arch }}.iss
-            - name: Upload Artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                path: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
-                name: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
-                if-no-files-found: error
-                retention-days: 1
-    release:
-        needs: windows
-        name: Publishing Release
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v4
-            - name: Download Artifacts
-              uses: actions/download-artifact@v4
-              with:
-                merge-multiple: true
-                pattern: gevm-*
-                path: builds
-            - name: Create Release
-              run: gh release create ${{ github.ref_name }} --generate-notes --verify-tag builds/*
-              env:
-                GH_TOKEN: ${{ github.token }}
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['windows', 'linux']
+        arch: ['amd64', '386']
+    runs-on: ubuntu-latest
+    name: Building ${{ matrix.os }}-${{ matrix.arch }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Build Project
+        run: go build -o ./build/ -ldflags "-X github.com/bashidogames/gevm/cmd/gevm/version.version=${{ github.ref_name }}" ./cmd/gevm
+        env:
+          GOARCH: ${{ matrix.arch }}
+          GOOS: ${{ matrix.os }}
+      - name: Archive Build
+        run: cd build && zip ../gevm-${{ matrix.os }}-${{ matrix.arch }}.zip * && cd ..
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+          name: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+          if-no-files-found: error
+          retention-days: 1
+  windows:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: ['amd64', '386']
+        os: ['windows']
+    runs-on: windows-latest
+    name: Packaging ${{ matrix.os }}-${{ matrix.arch }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+      - name: Extract Build
+        run: 7z x gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+      - name: Package Build
+        run: iscc /dMyAppVersion=${{ github.ref_name }} package-${{ matrix.os }}-${{ matrix.arch }}.iss
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
+          name: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
+          if-no-files-found: error
+          retention-days: 1
+  release:
+    needs: windows
+    name: Publishing Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          pattern: gevm-*
+          path: builds
+      - name: Create Release
+        run: gh release create ${{ github.ref_name }} --generate-notes --verify-tag builds/*
+        env:
+          GH_TOKEN: ${{ github.token }}

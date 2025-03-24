@@ -94,7 +94,7 @@ gevm settings set godot-root-directory <path>
 
 ### `cache`
 
-This tool uses a download cache to making reinstalling versions quicker. You may want to free up space by using the `clear` command:
+This tool uses a download cache to make reinstalling versions quicker. You may want to free up space by using the `clear` command:
 
 ```
 gevm cache clear
