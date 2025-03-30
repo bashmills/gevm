@@ -49,3 +49,8 @@ var Mappings = map[platform.Platform]Mapping{
 		Arch:   []string{"32"},
 	},
 }
+
+var Overrides = map[platform.Platform][]string{
+	platform.DarwinAmd64: {"universal"},
+	platform.Darwin386:   {"universal"},
+}

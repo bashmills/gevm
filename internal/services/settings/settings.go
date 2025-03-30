@@ -17,6 +17,8 @@ type Service struct {
 }
 
 func (s *Service) Reset() error {
+	s.Config.Logger.Debug("Attempting to reset settings...")
+
 	err := s.Config.Reset()
 	if err != nil {
 		return fmt.Errorf("cannot reset config: %w", err)

@@ -48,7 +48,7 @@ func (g *Github) FetchAsset(platform platform.Platform, semver semver.Semver) (*
 	url := fmt.Sprintf(ASSET_URL, semver.Relver.GodotString())
 	var data Data
 
-	g.Config.Logger.Trace("Fetching assets from url: %s", url)
+	g.Config.Logger.Trace("Fetching data from url: %s", url)
 
 	err := downloading.Fetch(url, func(header http.Header, bytes []byte) error {
 		err := json.Unmarshal(bytes, &data)

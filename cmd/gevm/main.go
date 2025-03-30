@@ -25,7 +25,7 @@ var CLI struct {
 	Cache           cache.Cache                     `cmd:"" help:"Run commands on the cache"`
 	Version         version.Version                 `cmd:"" help:"Print current version"`
 
-	LoggingLevel string `short:"l" enum:"nothing,error,warning,info,debug,trace" default:"debug" help:"Which log level to use"`
+	LoggingLevel string `short:"l" enum:"nothing,error,warning,info,debug,trace" default:"info" help:"Which log level to use"`
 	ConfigPath   string `help:"Override which config path to use"`
 	Silent       bool   `help:"Prevent progress bar log spam"`
 }

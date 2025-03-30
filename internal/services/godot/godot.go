@@ -25,7 +25,7 @@ type Service struct {
 }
 
 func (s *Service) Download(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to download '%s' godot...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to download '%s' godot...", semver.GodotString())
 
 	asset, err := s.Environment.FetchGodotAsset(semver)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -48,8 +48,8 @@ func (s *Service) Download(semver semver.Semver) error {
 		return nil
 	}
 
-	s.Config.Logger.Trace("Downloading from: %s", asset.DownloadURL)
-	s.Config.Logger.Trace("Downloading to: %s", archivePath)
+	s.Config.Logger.Debug("Downloading from: %s", asset.DownloadURL)
+	s.Config.Logger.Debug("Downloading to: %s", archivePath)
 
 	err = downloading.Download(s.Config.Logger, asset.DownloadURL, archivePath, s.Config.Silent)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -65,7 +65,7 @@ func (s *Service) Download(semver semver.Semver) error {
 }
 
 func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
-	s.Config.Logger.Trace("Attempting to uninstall '%s' godot...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to uninstall '%s' godot...", semver.GodotString())
 
 	targetDirectory := s.targetDirectory(semver)
 
@@ -82,7 +82,7 @@ func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
 		return nil
 	}
 
-	s.Config.Logger.Trace("Removing directory: %s", targetDirectory)
+	s.Config.Logger.Debug("Removing directory: %s", targetDirectory)
 
 	err = os.RemoveAll(targetDirectory)
 	if err != nil {
@@ -94,7 +94,7 @@ func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
 }
 
 func (s *Service) Install(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to install '%s' godot...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to install '%s' godot...", semver.GodotString())
 
 	asset, err := s.Environment.FetchGodotAsset(semver)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -128,8 +128,8 @@ func (s *Service) Install(semver semver.Semver) error {
 		return fmt.Errorf("cannot remove target directory: %w", err)
 	}
 
-	s.Config.Logger.Trace("Downloading from: %s", asset.DownloadURL)
-	s.Config.Logger.Trace("Downloading to: %s", archivePath)
+	s.Config.Logger.Debug("Downloading from: %s", asset.DownloadURL)
+	s.Config.Logger.Debug("Downloading to: %s", archivePath)
 
 	err = downloading.Download(s.Config.Logger, asset.DownloadURL, archivePath, s.Config.Silent)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -140,8 +140,8 @@ func (s *Service) Install(semver semver.Semver) error {
 		return fmt.Errorf("download failed: %w", err)
 	}
 
-	s.Config.Logger.Trace("Unzipping from: %s", archivePath)
-	s.Config.Logger.Trace("Unzipping to: %s", targetDirectory)
+	s.Config.Logger.Debug("Unzipping from: %s", archivePath)
+	s.Config.Logger.Debug("Unzipping to: %s", targetDirectory)
 
 	err = archiving.Unzip(s.Config.Logger, archivePath, targetDirectory)
 	if err != nil {
@@ -153,7 +153,7 @@ func (s *Service) Install(semver semver.Semver) error {
 }
 
 func (s *Service) Use(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to use '%s' godot...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to use '%s' godot...", semver.GodotString())
 
 	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {
@@ -166,7 +166,7 @@ func (s *Service) Use(semver semver.Semver) error {
 
 	linkPath := s.Locator.LinkPath(semver)
 
-	s.Config.Logger.Trace("Creating godot symlink: %s => %s", linkPath, targetPath)
+	s.Config.Logger.Debug("Creating godot symlink: %s => %s", linkPath, targetPath)
 
 	err = os.MkdirAll(s.Config.BinDirectory, utils.OS_DIRECTORY)
 	if err != nil {
@@ -222,7 +222,7 @@ func (s *Service) List() error {
 
 		semver, err := semver.Parse(entry.Name())
 		if err != nil {
-			s.Config.Logger.Trace("Failed to recognize version: %s", err)
+			s.Config.Logger.Warning("Failed to recognize version: %s", err)
 			continue
 		}
 
