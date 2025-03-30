@@ -18,11 +18,11 @@ type Service struct {
 }
 
 func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
-	s.Config.Logger.Trace("Attempting to remove '%s' desktop shortcut...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to remove '%s' desktop shortcut...", semver.GodotString())
 
 	shortcutPath := s.Locator.DesktopShortcutPath(semver)
 
-	s.Config.Logger.Trace("Removing desktop shortcut: %s", shortcutPath)
+	s.Config.Logger.Debug("Removing desktop shortcut: %s", shortcutPath)
 
 	exists, err := utils.DoesExist(shortcutPath)
 	if err != nil {
@@ -47,7 +47,7 @@ func (s *Service) Remove(semver semver.Semver, logMissing bool) error {
 }
 
 func (s *Service) Add(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to add '%s' desktop shortcut...", semver.GodotString())
+	s.Config.Logger.Debug("Attempting to add '%s' desktop shortcut...", semver.GodotString())
 
 	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {
@@ -61,7 +61,7 @@ func (s *Service) Add(semver semver.Semver) error {
 	shortcutPath := s.Locator.DesktopShortcutPath(semver)
 	shortcutName := s.Locator.ShortcutName(semver)
 
-	s.Config.Logger.Trace("Adding '%s' desktop shortcut: %s => %s", shortcutName, shortcutPath, targetPath)
+	s.Config.Logger.Debug("Adding '%s' desktop shortcut: %s => %s", shortcutName, shortcutPath, targetPath)
 
 	exists, err := utils.DoesExist(shortcutPath)
 	if err != nil {

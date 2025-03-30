@@ -24,7 +24,7 @@ type Service struct {
 }
 
 func (s *Service) Download(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to download '%s' export templates...", semver.ExportTemplatesString())
+	s.Config.Logger.Debug("Attempting to download '%s' export templates...", semver.ExportTemplatesString())
 
 	asset, err := s.Environment.FetchExportTemplatesAsset(semver)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -47,8 +47,8 @@ func (s *Service) Download(semver semver.Semver) error {
 		return nil
 	}
 
-	s.Config.Logger.Trace("Downloading from: %s", asset.DownloadURL)
-	s.Config.Logger.Trace("Downloading to: %s", archivePath)
+	s.Config.Logger.Debug("Downloading from: %s", asset.DownloadURL)
+	s.Config.Logger.Debug("Downloading to: %s", archivePath)
 
 	err = downloading.Download(s.Config.Logger, asset.DownloadURL, archivePath, s.Config.Silent)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -64,7 +64,7 @@ func (s *Service) Download(semver semver.Semver) error {
 }
 
 func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
-	s.Config.Logger.Trace("Attempting to uninstall '%s' export templates...", semver.ExportTemplatesString())
+	s.Config.Logger.Debug("Attempting to uninstall '%s' export templates...", semver.ExportTemplatesString())
 
 	targetDirectory := s.targetDirectory(semver)
 
@@ -81,7 +81,7 @@ func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
 		return nil
 	}
 
-	s.Config.Logger.Trace("Removing directory: %s", targetDirectory)
+	s.Config.Logger.Debug("Removing directory: %s", targetDirectory)
 
 	err = os.RemoveAll(targetDirectory)
 	if err != nil {
@@ -93,7 +93,7 @@ func (s *Service) Uninstall(semver semver.Semver, logMissing bool) error {
 }
 
 func (s *Service) Install(semver semver.Semver) error {
-	s.Config.Logger.Trace("Attempting to install '%s' export templates...", semver.ExportTemplatesString())
+	s.Config.Logger.Debug("Attempting to install '%s' export templates...", semver.ExportTemplatesString())
 
 	asset, err := s.Environment.FetchExportTemplatesAsset(semver)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -134,8 +134,8 @@ func (s *Service) Install(semver semver.Semver) error {
 		return fmt.Errorf("cannot remove temp directory: %w", err)
 	}
 
-	s.Config.Logger.Trace("Downloading from: %s", asset.DownloadURL)
-	s.Config.Logger.Trace("Downloading to: %s", archivePath)
+	s.Config.Logger.Debug("Downloading from: %s", asset.DownloadURL)
+	s.Config.Logger.Debug("Downloading to: %s", archivePath)
 
 	err = downloading.Download(s.Config.Logger, asset.DownloadURL, archivePath, s.Config.Silent)
 	if errors.Is(err, downloading.ErrNotFound) {
@@ -146,16 +146,16 @@ func (s *Service) Install(semver semver.Semver) error {
 		return fmt.Errorf("download failed: %w", err)
 	}
 
-	s.Config.Logger.Trace("Unzipping from: %s", archivePath)
-	s.Config.Logger.Trace("Unzipping to: %s", rootDirectory)
+	s.Config.Logger.Debug("Unzipping from: %s", archivePath)
+	s.Config.Logger.Debug("Unzipping to: %s", rootDirectory)
 
 	err = archiving.Unzip(s.Config.Logger, archivePath, rootDirectory)
 	if err != nil {
 		return fmt.Errorf("unzip failed: %w", err)
 	}
 
-	s.Config.Logger.Trace("Moving from: %s", tempDirectory)
-	s.Config.Logger.Trace("Moving to: %s", targetDirectory)
+	s.Config.Logger.Debug("Moving from: %s", tempDirectory)
+	s.Config.Logger.Debug("Moving to: %s", targetDirectory)
 
 	err = os.Rename(tempDirectory, targetDirectory)
 	if err != nil {
@@ -187,7 +187,7 @@ func (s *Service) List() error {
 
 		semver, err := semver.Parse(entry.Name())
 		if err != nil {
-			s.Config.Logger.Trace("Failed to recognize version: %s", err)
+			s.Config.Logger.Warning("Failed to recognize version: %s", err)
 			continue
 		}
 

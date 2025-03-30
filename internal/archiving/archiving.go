@@ -18,7 +18,7 @@ func Unzip(logger logger.Logger, from string, to string) error {
 	}
 	defer reader.Close()
 
-	logger.Debug("Unzipping '%s'", filepath.Base(from))
+	logger.Info("Unzipping '%s'", filepath.Base(from))
 
 	err = unzip(reader, to)
 	if err != nil {
