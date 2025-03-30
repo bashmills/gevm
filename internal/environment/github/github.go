@@ -154,17 +154,22 @@ func (g *Github) FetchDownloads(mono bool) ([]repository.Download, error) {
 			Relver: relver,
 		}
 
-		for platform, mapping := range mappings.Mappings {
-			for _, asset := range data.Assets {
-				parts := AssetRegex.FindStringSubmatch(asset.Name)
-				if len(parts) == 0 {
-					continue
-				}
+		for _, asset := range data.Assets {
+			parts := AssetRegex.FindStringSubmatch(asset.Name)
+			if len(parts) == 0 {
+				continue
+			}
 
-				isMono := len(parts[1]) > 0
-				system := parts[2]
-				arch := parts[4]
+			isMono := len(parts[1]) > 0
+			if isMono != mono {
+				continue
+			}
 
+			system := parts[2]
+			arch := parts[4]
+			found := false
+
+			for platform, mapping := range mappings.Mappings {
 				if slices.Index(mapping.System, system) < 0 {
 					continue
 				}
@@ -173,14 +178,29 @@ func (g *Github) FetchDownloads(mono bool) ([]repository.Download, error) {
 					continue
 				}
 
-				if isMono != mono {
-					continue
+				existing, exists := download.Assets[platform]
+				if exists {
+					override := mappings.Overrides[platform]
+					if len(override) <= 0 {
+						g.Config.Logger.Warning("Asset already exists for '%s' platform: %s == %s", platform, existing.Name, asset.Name)
+						continue
+					}
+
+					if slices.Index(override, arch) < 0 {
+						continue
+					}
 				}
 
 				download.Assets[platform] = repository.Asset{
 					DownloadURL: asset.DownloadURL,
 					Name:        asset.Name,
 				}
+
+				found = true
+			}
+
+			if !found {
+				g.Config.Logger.Warning("No mapping found for asset: %s", asset.Name)
 			}
 		}
 
