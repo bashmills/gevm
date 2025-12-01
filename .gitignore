@@ -24,3 +24,5 @@ go.work
 
 # Env file
 .env
+
+.DS_Store
