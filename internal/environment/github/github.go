@@ -19,11 +19,13 @@ import (
 
 const REPOSITORY_URL = "https://api.github.com/repos/godotengine/godot-builds/releases?per_page=100"
 const ASSET_URL = "https://api.github.com/repos/godotengine/godot-builds/releases/tags/%s"
-const ASSET_REGEX_PATTERN = "([-_.]mono)?[-_.](export|linux|x11|win|macos|osx)([-_.]?x86)?[-_.]?(templates|universal|fat|arm64|arm32|64|32)([-_.]?exe)?.(tpz|zip)"
+const ASSET_REGEX_PATTERN = "([-_.]mono)?[-_.](export|linux|x11|windows|win|macos|osx)([-_.]?x86)?[-_.]?(templates|universal|fat|arm64|64)([-_.]?exe)?.(tpz|zip)"
 const NEXT_REGEX_PATTERN = "<([^>]*)>[^<]*(next)"
+const OLD_REGEX_PATTERN = "^(OLD)[-_.]"
 
 var AssetRegex = regexp.MustCompile(ASSET_REGEX_PATTERN)
 var NextRegex = regexp.MustCompile(NEXT_REGEX_PATTERN)
+var OldRegex = regexp.MustCompile(OLD_REGEX_PATTERN)
 
 type Github struct {
 	Config *config.Config
@@ -67,6 +69,10 @@ func (g *Github) FetchAsset(platform platform.Platform, semver semver.Semver) (*
 	for _, asset := range data.Assets {
 		parts := AssetRegex.FindStringSubmatch(asset.Name)
 		if len(parts) == 0 {
+			continue
+		}
+
+		if OldRegex.MatchString(asset.Name) {
 			continue
 		}
 
@@ -157,6 +163,10 @@ func (g *Github) FetchDownloads(mono bool) ([]repository.Download, error) {
 		for _, asset := range data.Assets {
 			parts := AssetRegex.FindStringSubmatch(asset.Name)
 			if len(parts) == 0 {
+				continue
+			}
+
+			if OldRegex.MatchString(asset.Name) {
 				continue
 			}
 

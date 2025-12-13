@@ -19,7 +19,7 @@ Welcome to the repository for Godot Engine Version Manager! This tool is built u
 
 ### Linux
 
-You can use the very basic helper install script to download and install the Linux binary:
+You can use the very basic helper install script to download and install the binary:
 
 ```
 curl -o- https://raw.githubusercontent.com/bashidogames/gevm/master/install.sh | bash
@@ -30,6 +30,10 @@ You will need to make sure `~/.local/bin` is in your `PATH` environment variable
 ```
 export PATH="~/.local/bin:$PATH"
 ```
+
+### Mac
+
+See installation for linux above.
 
 ### Manual
 

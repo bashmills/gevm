@@ -9,18 +9,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows", "linux", "darwin"]
-        include:
-          - os: "windows"
-            arch: "amd64"
-          - os: "windows"
-            arch: "386"
-          - os: "linux"
-            arch: "amd64"
-          - os: "linux"
-            arch: "386"
-          - os: "darwin"
-            arch: "arm64"
+        os: ["windows", "darwin", "linux"]
+        arch: ["arm64", "amd64"]
     runs-on: ubuntu-latest
     name: Building ${{ matrix.os }}-${{ matrix.arch }}
     steps:
@@ -46,29 +36,24 @@ jobs:
           retention-days: 1
   windows:
     needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: ["amd64", "386"]
-        os: ["windows"]
     runs-on: windows-latest
-    name: Packaging ${{ matrix.os }}-${{ matrix.arch }}
+    name: Packaging Windows
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+          name: gevm-windows-amd64.zip
       - name: Extract Build
-        run: 7z x gevm-${{ matrix.os }}-${{ matrix.arch }}.zip
+        run: 7z x gevm-windows-amd64.zip
       - name: Package Build
-        run: iscc /dMyAppVersion=${{ github.ref_name }} package-${{ matrix.os }}-${{ matrix.arch }}.iss
+        run: iscc /dMyAppVersion=${{ github.ref_name }} package-windows.iss
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
-          name: gevm-${{ matrix.os }}-${{ matrix.arch }}-installer.exe
+          path: gevm-installer.exe
+          name: gevm-installer.exe
           if-no-files-found: error
           retention-days: 1
   release:
