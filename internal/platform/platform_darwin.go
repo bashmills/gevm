@@ -14,7 +14,7 @@ func DefaultExportTemplatesRootDirectory() (string, error) {
 		return "", fmt.Errorf("cannot determine user home directory: %w", err)
 	}
 
-	directory := filepath.Join(userHomeDir, "Library", "Application Support", "Godot", "templates")
+	directory := filepath.Join(userHomeDir, "Library", "Application Support", "Godot", "export_templates")
 	return directory, nil
 }
 

@@ -73,6 +73,11 @@ func (s *Service) Add(semver semver.Semver) error {
 		return nil
 	}
 
+	err = os.MkdirAll(s.Config.ApplicationShortcutDirectory, utils.OS_DIRECTORY)
+	if err != nil {
+		return fmt.Errorf("cannot make directory: %w", err)
+	}
+
 	err = shortcut.Create(shortcutPath, targetPath, shortcutName)
 	if err != nil {
 		return fmt.Errorf("cannot create shortcut: %w", err)
