@@ -9,7 +9,6 @@ import (
 	"github.com/bashidogames/gevm/cmd/gevm/exporttemplates"
 	"github.com/bashidogames/gevm/cmd/gevm/godot"
 	"github.com/bashidogames/gevm/cmd/gevm/settings"
-	"github.com/bashidogames/gevm/cmd/gevm/shortcuts"
 	"github.com/bashidogames/gevm/cmd/gevm/version"
 	"github.com/bashidogames/gevm/cmd/gevm/versions"
 	"github.com/bashidogames/gevm/config"
@@ -20,7 +19,6 @@ var CLI struct {
 	Versions        versions.Versions               `cmd:"" help:"View available versions for download"`
 	ExportTemplates exporttemplates.ExportTemplates `cmd:"" help:"Run commands related to export templates"`
 	Godot           godot.Godot                     `cmd:"" help:"Run commands related to godot engines"`
-	Shortcuts       shortcuts.Shortcuts             `cmd:"" help:"Remove and add godot shortcuts"`
 	Settings        settings.Settings               `cmd:"" help:"View and adjust config settings"`
 	Cache           cache.Cache                     `cmd:"" help:"Run commands on the cache"`
 	Version         version.Version                 `cmd:"" help:"Print current version"`

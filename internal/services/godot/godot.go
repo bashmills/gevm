@@ -152,41 +152,6 @@ func (s *Service) Install(semver semver.Semver) error {
 	return nil
 }
 
-func (s *Service) Use(semver semver.Semver) error {
-	s.Config.Logger.Debug("Attempting to use '%s' godot...", semver.GodotString())
-
-	targetPath, err := s.Locator.TargetPath(semver)
-	if errors.Is(err, os.ErrNotExist) {
-		s.Config.Logger.Error("Godot '%s' not found. Use `gevm godot list` to see installed versions.", semver.GodotString())
-		return nil
-	}
-	if err != nil {
-		return fmt.Errorf("cannot determine target path: %w", err)
-	}
-
-	linkPath := s.Locator.LinkPath(semver)
-
-	s.Config.Logger.Debug("Creating godot symlink: %s => %s", linkPath, targetPath)
-
-	err = os.MkdirAll(s.Config.BinDirectory, utils.OS_DIRECTORY)
-	if err != nil {
-		return fmt.Errorf("cannot make directory: %w", err)
-	}
-
-	err = os.RemoveAll(linkPath)
-	if err != nil {
-		return fmt.Errorf("cannot remove link path: %w", err)
-	}
-
-	err = os.Symlink(targetPath, linkPath)
-	if err != nil {
-		return fmt.Errorf("cannot create link: %w", err)
-	}
-
-	s.Config.Logger.Info("Using '%s' godot", semver.GodotString())
-	return nil
-}
-
 func (s *Service) Path(semver semver.Semver) error {
 	targetPath, err := s.Locator.TargetPath(semver)
 	if errors.Is(err, os.ErrNotExist) {

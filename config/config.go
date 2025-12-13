@@ -16,8 +16,6 @@ import (
 type Config struct {
 	ExportTemplatesRootDirectory string `json:"export-templates-root-directory"`
 	GodotRootDirectory           string `json:"godot-root-directory"`
-	ApplicationShortcutDirectory string `json:"application-shortcut-directory"`
-	DesktopShortcutDirectory     string `json:"desktop-shortcut-directory"`
 	CacheDirectory               string `json:"cache-directory"`
 	BinDirectory                 string `json:"bin-directory"`
 
@@ -109,16 +107,6 @@ func DefaultConfig() (*Config, error) {
 		return nil, fmt.Errorf("cannot get default godot root directory: %w", err)
 	}
 
-	defaultApplicationShortcutDirectory, err := platform.DefaultApplicationShortcutDirectory()
-	if err != nil {
-		return nil, fmt.Errorf("cannot get default application shortcut directory: %w", err)
-	}
-
-	defaultDesktopShortcutDirectory, err := platform.DefaultDesktopShortcutDirectory()
-	if err != nil {
-		return nil, fmt.Errorf("cannot get default desktop shortcut directory: %w", err)
-	}
-
 	defaultCacheDirectory, err := platform.DefaultCacheDirectory()
 	if err != nil {
 		return nil, fmt.Errorf("cannot get default cache directory: %w", err)
@@ -147,8 +135,6 @@ func DefaultConfig() (*Config, error) {
 	return &Config{
 		ExportTemplatesRootDirectory: defaultExportTemplatesRootDirectory,
 		GodotRootDirectory:           defaultGodotRootDirectory,
-		ApplicationShortcutDirectory: defaultApplicationShortcutDirectory,
-		DesktopShortcutDirectory:     defaultDesktopShortcutDirectory,
 		CacheDirectory:               defaultCacheDirectory,
 		BinDirectory:                 defaultBinDirectory,
 

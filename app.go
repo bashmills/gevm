@@ -12,7 +12,6 @@ import (
 	"github.com/bashidogames/gevm/internal/services/exporttemplates"
 	"github.com/bashidogames/gevm/internal/services/godot"
 	"github.com/bashidogames/gevm/internal/services/settings"
-	"github.com/bashidogames/gevm/internal/services/shortcuts"
 	"github.com/bashidogames/gevm/internal/services/versions"
 )
 
@@ -20,7 +19,6 @@ type App struct {
 	Versions        *versions.Service
 	ExportTemplates *exporttemplates.Service
 	Godot           *godot.Service
-	Shortcuts       *shortcuts.Service
 	Settings        *settings.Service
 	Cache           *cache.Service
 }
@@ -40,7 +38,6 @@ func New(config *config.Config) (*App, error) {
 		Versions:        versions.New(environment, config),
 		ExportTemplates: exporttemplates.New(environment, config),
 		Godot:           godot.New(environment, locator, config),
-		Shortcuts:       shortcuts.New(locator, config),
 		Settings:        settings.New(config),
 		Cache:           cache.New(config),
 	}, nil
