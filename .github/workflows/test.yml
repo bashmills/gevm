@@ -3,17 +3,27 @@ on:
   workflow_dispatch: {}
   pull_request:
     branches:
-      - 'main'
+      - "main"
   push:
     branches:
-      - 'main'
+      - "main"
 jobs:
   test:
     strategy:
       fail-fast: false
       matrix:
-        os: ['windows', 'linux']
-        arch: ['amd64', '386']
+        os: ["windows", "linux", "darwin"]
+        include:
+          - os: "windows"
+            arch: "amd64"
+          - os: "windows"
+            arch: "386"
+          - os: "linux"
+            arch: "amd64"
+          - os: "linux"
+            arch: "386"
+          - os: "darwin"
+            arch: "arm64"
     runs-on: ubuntu-latest
     name: Testing ${{ matrix.os }}-${{ matrix.arch }}
     steps:
