@@ -65,7 +65,7 @@ gevm versions list --mono --all
 Install a version of godot using the `install` command:
 
 ```
-gevm godot install 4.3 --include-export-templates --release beta1 --mono --application --desktop
+gevm godot install 4.3 --include-export-templates --release beta1 --mono
 ```
 
 | Flag | Description |
@@ -73,8 +73,6 @@ gevm godot install 4.3 --include-export-templates --release beta1 --mono --appli
 | `--include-export-templates` | Additionally download and install the export templates for this version. |
 | `--release` | Specify a non-stable release to use. |
 | `--mono` | Use the mono version. |
-| `--application` | Attempt to create an application shortcut (start menu, app menu, etc). |
-| `--desktop` | Attempt to create a desktop shortcut. |
 
 Uninstall a version by using the `uninstall` command:
 
@@ -128,6 +126,10 @@ You can uninstall on Linux by just removing the binary:
 ```
 rm -f ~/.local/bin/gevm
 ```
+
+### Mac
+
+See uninstallation for linux above.
 
 ## Contributing
 
