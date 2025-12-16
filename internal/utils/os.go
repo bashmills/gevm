@@ -37,6 +37,15 @@ func LocateExecutable(callback func(string) bool, root string, isDir bool) (stri
 	return result, nil
 }
 
+func IsDirectoryEmpty(path string) (bool, error) {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return false, fmt.Errorf("cannot read directory: %w", err)
+	}
+
+	return len(entries) == 0, nil
+}
+
 func DoesExist(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {

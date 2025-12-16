@@ -104,12 +104,15 @@ gevm cache clear
 
 ## Uninstallation
 
-The uninstallation process will not remove any installed versions or cached downloads so you may want to that first to free up space:
+The uninstallation process will not remove any installed export templates, versions or cached downloads so you may want to that first to free up space:
 
 ```
-gevm godot list
-gevm godot uninstall x.x.x.x
-...
+gevm export-templates clear
+```
+```
+gevm godot clear
+```
+```
 gevm cache clear
 ```
 

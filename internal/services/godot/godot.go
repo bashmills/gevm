@@ -204,6 +204,45 @@ func (s *Service) List() error {
 	return nil
 }
 
+func (s *Service) Clear() error {
+	entries, err := os.ReadDir(s.Config.GodotRootDirectory)
+	if !errors.Is(err, os.ErrNotExist) && err != nil {
+		return fmt.Errorf("cannot read godot root directory: %w", err)
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		semver, err := semver.Parse(entry.Name())
+		if err != nil {
+			s.Config.Logger.Warning("Failed to recognize version: %s", err)
+			continue
+		}
+
+		err = s.Uninstall(semver, true)
+		if err != nil {
+			return fmt.Errorf("cannot clear godot: %w", err)
+		}
+	}
+
+	empty, err := utils.IsDirectoryEmpty(s.Config.GodotRootDirectory)
+	if !errors.Is(err, os.ErrNotExist) && err != nil {
+		return fmt.Errorf("failed to check emptiness: %w", err)
+	}
+
+	if empty {
+		err = os.Remove(s.Config.GodotRootDirectory)
+		if err != nil {
+			return fmt.Errorf("cannot remove godot root directory: %w", err)
+		}
+	}
+
+	s.Config.Logger.Info("Godot cleared")
+	return nil
+}
+
 func (s *Service) targetDirectory(semver semver.Semver) string {
 	return filepath.Join(s.Config.GodotRootDirectory, semver.GodotString())
 }

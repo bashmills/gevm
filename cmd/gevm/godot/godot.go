@@ -102,10 +102,31 @@ func (c *List) Run(app *gevm.App) error {
 	return nil
 }
 
+type Clear struct {
+	ExcludeExportTemplates bool `short:"e" help:"Exclude export templates in uninstall"`
+}
+
+func (c *Clear) Run(app *gevm.App) error {
+	if !c.ExcludeExportTemplates {
+		err := app.ExportTemplates.Clear()
+		if err != nil {
+			return fmt.Errorf("cannot clear export templates: %w", err)
+		}
+	}
+
+	err := app.Godot.Clear()
+	if err != nil {
+		return fmt.Errorf("cannot clear godot: %w", err)
+	}
+
+	return nil
+}
+
 type Godot struct {
 	Download  Download  `cmd:"" help:"Download godot engine to the cache by version"`
 	Uninstall Uninstall `cmd:"" help:"Uninstall godot engine by version"`
 	Install   Install   `cmd:"" help:"Install godot engine by version"`
 	Path      Path      `cmd:"" help:"Print path to godot engine version"`
 	List      List      `cmd:"" help:"List all current godot engine versions"`
+	Clear     Clear     `cmd:"" help:"Clear all godot engine versions"`
 }

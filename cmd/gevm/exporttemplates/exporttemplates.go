@@ -63,9 +63,21 @@ func (c *List) Run(app *gevm.App) error {
 	return nil
 }
 
+type Clear struct{}
+
+func (c *Clear) Run(app *gevm.App) error {
+	err := app.ExportTemplates.Clear()
+	if err != nil {
+		return fmt.Errorf("cannot clear export templates: %w", err)
+	}
+
+	return nil
+}
+
 type ExportTemplates struct {
 	Download  Download  `cmd:"" help:"Download export templates to the cache by version"`
 	Uninstall Uninstall `cmd:"" help:"Uninstall export templates by version"`
 	Install   Install   `cmd:"" help:"Install export templates by version"`
 	List      List      `cmd:"" help:"List all current export template versions"`
+	Clear     Clear     `cmd:"" help:"Clear all export template versions"`
 }
