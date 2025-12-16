@@ -74,10 +74,28 @@ gevm godot install 4.3 --include-export-templates --release beta1 --mono
 | `--release` | Specify a non-stable release to use. |
 | `--mono` | Use the mono version. |
 
-Uninstall a version by using the `uninstall` command:
+Uninstall a specific version and the export templates by using the `uninstall` command:
 
 ```
-gevm godot uninstall 4.3
+gevm godot uninstall 4.3 --release beta1 --mono
+```
+
+You can use the `path` command to print the path to the specified version if installed. You can use this from external tools to get the godot path for running builds:
+
+```
+gevm godot path 4.3 --release beta1 --mono
+```
+
+Use the `list` command to show all currently installed versions:
+
+```
+gevm godot list
+```
+
+Uninstall all versions and export templates by using the `clear` command:
+
+```
+gevm godot clear
 ```
 
 ### `settings`
@@ -94,6 +112,12 @@ You can then change any of these settings by using the `set` command:
 gevm settings set godot-root-directory <path>
 ```
 
+Use the `reset` command to reset all settings to defaults:
+
+```
+gevm settings reset
+```
+
 ### `cache`
 
 This tool uses a download cache to make reinstalling versions quicker. You may want to free up space by using the `clear` command:
@@ -104,11 +128,8 @@ gevm cache clear
 
 ## Uninstallation
 
-The uninstallation process will not remove any installed export templates, versions or cached downloads so you may want to that first to free up space:
+The uninstallation process will not remove any installed versions or cached downloads so you may want to that first to free up space:
 
-```
-gevm export-templates clear
-```
 ```
 gevm godot clear
 ```
