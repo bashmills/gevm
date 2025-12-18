@@ -71,12 +71,12 @@ gevm versions detailed -m -a
 Install a version of godot using the `install` command:
 
 ```
-gevm godot install 4.3 --include-export-templates --release beta1 --mono
+gevm godot install 4.3 --release beta1 --mono
 ```
 
 | Flag | Short | Description |
 | --- | --- | --- |
-| `--include-export-templates` | `-i` | Additionally download and install the export templates for this version. |
+| `--exclude-export-templates` | `-e` | Exclude export templates from the command. |
 | `--release` | `-r` | Specify a non-stable release to use. |
 | `--mono` | `-m` | Use the mono version. |
 

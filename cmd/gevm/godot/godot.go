@@ -9,13 +9,13 @@ import (
 
 type Download struct {
 	Version                string `arg:"" help:"Godot engine version to download to cache in the format x.x.x.x, x.x.x or x.x"`
-	IncludeExportTemplates bool   `short:"i" help:"Include export templates in download"`
+	ExcludeExportTemplates bool   `short:"e" help:"Exclude export templates in download"`
 	Release                string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
 	Mono                   bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Download) Run(app *gevm.App) error {
-	if c.IncludeExportTemplates {
+	if !c.ExcludeExportTemplates {
 		err := app.ExportTemplates.Download(semver.Maybe(c.Version, c.Release, c.Mono))
 		if err != nil {
 			return fmt.Errorf("cannot download export templates: %w", err)
@@ -55,13 +55,13 @@ func (c *Uninstall) Run(app *gevm.App) error {
 
 type Install struct {
 	Version                string `arg:"" help:"Godot engine version to download and install in the format x.x.x.x, x.x.x or x.x"`
-	IncludeExportTemplates bool   `short:"i" help:"Include export templates in install"`
+	ExcludeExportTemplates bool   `short:"e" help:"Exclude export templates in install"`
 	Release                string `short:"r" default:"stable" help:"Release to use (dev1, alpha2, beta3, rc4, stable, etc)"`
 	Mono                   bool   `short:"m" help:"Use mono version"`
 }
 
 func (c *Install) Run(app *gevm.App) error {
-	if c.IncludeExportTemplates {
+	if !c.ExcludeExportTemplates {
 		err := app.ExportTemplates.Install(semver.Maybe(c.Version, c.Release, c.Mono))
 		if err != nil {
 			return fmt.Errorf("cannot install export templates: %w", err)
