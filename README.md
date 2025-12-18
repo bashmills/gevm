@@ -49,16 +49,22 @@ Below is some very basic usage for the more common commands. You can use `gevm -
 
 ### `versions`
 
-Use the `list` command for listing available stable versions for your platform:
+Use the `list` command for listing available versions for your platform:
 
 ```
 gevm versions list --mono --all
 ```
 
-| Flag | Description |
-| --- | --- |
-| `--mono` | List the mono versions instead. |
-| `--all` | Also list non-stable releases. |
+| Flag | Short | Description |
+| --- | --- | --- |
+| `--mono` | `-m` | List the mono versions instead. |
+| `--all` | `-a` | Also list non-stable releases. |
+
+View versions for all platforms using the `detailed` command:
+
+```
+gevm versions detailed -m -a
+```
 
 ### `godot`
 
@@ -68,22 +74,22 @@ Install a version of godot using the `install` command:
 gevm godot install 4.3 --include-export-templates --release beta1 --mono
 ```
 
-| Flag | Description |
-| --- | --- |
-| `--include-export-templates` | Additionally download and install the export templates for this version. |
-| `--release` | Specify a non-stable release to use. |
-| `--mono` | Use the mono version. |
+| Flag | Short | Description |
+| --- | --- | --- |
+| `--include-export-templates` | `-i` | Additionally download and install the export templates for this version. |
+| `--release` | `-r` | Specify a non-stable release to use. |
+| `--mono` | `-m` | Use the mono version. |
 
 Uninstall a specific version and the export templates by using the `uninstall` command:
 
 ```
-gevm godot uninstall 4.3 --release beta1 --mono
+gevm godot uninstall 4.3 -r beta1 -m
 ```
 
 You can use the `path` command to print the path to the specified version if installed. You can use this from external tools to get the godot path for running builds:
 
 ```
-gevm godot path 4.3 --release beta1 --mono
+gevm godot path 4.3 -r beta1 -m
 ```
 
 Use the `list` command to show all currently installed versions:
@@ -148,7 +154,7 @@ gevm cache clear
 You can uninstall on Linux by just removing the binary:
 
 ```
-rm -f ~/.local/bin/gevm
+rm ~/.local/bin/gevm
 ```
 
 ### Mac
