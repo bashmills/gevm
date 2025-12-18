@@ -231,6 +231,16 @@ func (s *Service) Clear() error {
 	return nil
 }
 
+func (s *Service) Exists(semver semver.Semver) (bool, error) {
+	targetDirectory := s.targetDirectory(semver)
+	exists, err := utils.DoesExist(targetDirectory)
+	if err != nil {
+		return false, fmt.Errorf("failed to check existence: %w", err)
+	}
+
+	return exists, nil
+}
+
 func (s *Service) targetDirectory(semver semver.Semver) string {
 	return filepath.Join(s.Config.ExportTemplatesRootDirectory, semver.ExportTemplatesString())
 }

@@ -34,11 +34,17 @@ func New(config *config.Config) (*App, error) {
 		return nil, fmt.Errorf("failed to create locator: %w", err)
 	}
 
+	versionsService := versions.New(environment, config)
+	exportTemplatesService := exporttemplates.New(environment, config)
+	godotService := godot.New(environment, exportTemplatesService, locator, config)
+	settingsService := settings.New(config)
+	cacheService := cache.New(config)
+
 	return &App{
-		Versions:        versions.New(environment, config),
-		ExportTemplates: exporttemplates.New(environment, config),
-		Godot:           godot.New(environment, locator, config),
-		Settings:        settings.New(config),
-		Cache:           cache.New(config),
+		Versions:        versionsService,
+		ExportTemplates: exportTemplatesService,
+		Godot:           godotService,
+		Settings:        settingsService,
+		Cache:           cacheService,
 	}, nil
 }

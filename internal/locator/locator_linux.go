@@ -17,7 +17,7 @@ type Locator struct {
 	Config *config.Config
 }
 
-func (l *Locator) TargetPath(semver semver.Semver) (string, error) {
+func (l *Locator) Find(semver semver.Semver) (string, error) {
 	return l.locateExecutable(filepath.Join(l.Config.GodotRootDirectory, semver.GodotString()))
 }
 
