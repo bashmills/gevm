@@ -1,7 +1,7 @@
 #define MyAppName "Godot Engine Version Manager (gevm)"
-#define MyAppID "games.bashido.gevm.windows"
-#define MyAppPublisher "Bashido Games"
-#define MyAppURL "https://github.com/bashidogames/gevm"
+#define MyAppID "com.bashmills.gevm"
+#define MyAppPublisher "Bash Mills"
+#define MyAppURL "https://github.com/bashmills/gevm"
 #define MyAppExeName "gevm.exe"
 
 [Setup]
@@ -148,7 +148,7 @@ begin
     if CurStep = ssPostInstall then begin
         if WizardIsTaskSelected('addPath') then
             AddPath(ExpandConstant('{app}'));
-        
+
         AddLogParam('QuietUninstallString');
         AddLogParam('UninstallString');
     end;

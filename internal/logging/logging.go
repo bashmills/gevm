@@ -3,8 +3,8 @@ package logging
 import (
 	"fmt"
 
-	"github.com/bashidogames/gevm/internal/utils"
-	"github.com/bashidogames/gevm/logger"
+	"github.com/bashmills/gevm/internal/utils"
+	"github.com/bashmills/gevm/logger"
 )
 
 type Level int64

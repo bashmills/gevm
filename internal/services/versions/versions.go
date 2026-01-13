@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/environment"
-	"github.com/bashidogames/gevm/internal/platform"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/environment"
+	"github.com/bashmills/gevm/internal/platform"
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 

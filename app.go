@@ -3,16 +3,16 @@ package gevm
 import (
 	"fmt"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/environment"
-	"github.com/bashidogames/gevm/internal/environment/fetcher"
-	"github.com/bashidogames/gevm/internal/environment/github"
-	"github.com/bashidogames/gevm/internal/locator"
-	"github.com/bashidogames/gevm/internal/services/cache"
-	"github.com/bashidogames/gevm/internal/services/exporttemplates"
-	"github.com/bashidogames/gevm/internal/services/godot"
-	"github.com/bashidogames/gevm/internal/services/settings"
-	"github.com/bashidogames/gevm/internal/services/versions"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/environment"
+	"github.com/bashmills/gevm/internal/environment/fetcher"
+	"github.com/bashmills/gevm/internal/environment/github"
+	"github.com/bashmills/gevm/internal/locator"
+	"github.com/bashmills/gevm/internal/services/cache"
+	"github.com/bashmills/gevm/internal/services/exporttemplates"
+	"github.com/bashmills/gevm/internal/services/godot"
+	"github.com/bashmills/gevm/internal/services/settings"
+	"github.com/bashmills/gevm/internal/services/versions"
 )
 
 type App struct {

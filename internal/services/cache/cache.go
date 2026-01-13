@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bashidogames/gevm/config"
+	"github.com/bashmills/gevm/config"
 )
 
 type Service struct {

@@ -21,7 +21,7 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Build Project
-        run: go build -o ./build/ -ldflags "-X github.com/bashidogames/gevm/cmd/gevm/version.version=${{ github.ref_name }}" ./cmd/gevm
+        run: go build -o ./build/ -ldflags "-X github.com/bashmills/gevm/cmd/gevm/version.version=${{ github.ref_name }}" ./cmd/gevm
         env:
           GOARCH: ${{ matrix.arch }}
           GOOS: ${{ matrix.os }}

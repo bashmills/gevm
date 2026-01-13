@@ -3,7 +3,7 @@ package settings
 import (
 	"fmt"
 
-	"github.com/bashidogames/gevm"
+	"github.com/bashmills/gevm"
 )
 
 type Reset struct{}

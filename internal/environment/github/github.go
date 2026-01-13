@@ -9,12 +9,12 @@ import (
 	"regexp"
 	"slices"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/downloading"
-	"github.com/bashidogames/gevm/internal/environment/github/mappings"
-	"github.com/bashidogames/gevm/internal/platform"
-	"github.com/bashidogames/gevm/internal/repository"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/downloading"
+	"github.com/bashmills/gevm/internal/environment/github/mappings"
+	"github.com/bashmills/gevm/internal/platform"
+	"github.com/bashmills/gevm/internal/repository"
+	"github.com/bashmills/gevm/semver"
 )
 
 const REPOSITORY_URL = "https://api.github.com/repos/godotengine/godot-builds/releases?per_page=100"

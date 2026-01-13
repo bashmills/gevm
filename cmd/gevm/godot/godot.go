@@ -3,8 +3,8 @@ package godot
 import (
 	"fmt"
 
-	"github.com/bashidogames/gevm"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm"
+	"github.com/bashmills/gevm/semver"
 )
 
 type Download struct {

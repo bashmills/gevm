@@ -21,7 +21,7 @@ if [[ -z $GEVM_FILENAME ]]; then
     exit 1
 fi
 
-curl -LOs https://github.com/bashidogames/gevm/releases/latest/download/$GEVM_FILENAME
+curl -LOs https://github.com/bashmills/gevm/releases/latest/download/$GEVM_FILENAME
 unzip -qo $GEVM_FILENAME
 rm $GEVM_FILENAME
 mkdir -p ~/.local/bin

@@ -4,15 +4,15 @@ import (
 	"log"
 
 	"github.com/alecthomas/kong"
-	"github.com/bashidogames/gevm"
-	"github.com/bashidogames/gevm/cmd/gevm/cache"
-	"github.com/bashidogames/gevm/cmd/gevm/exporttemplates"
-	"github.com/bashidogames/gevm/cmd/gevm/godot"
-	"github.com/bashidogames/gevm/cmd/gevm/settings"
-	"github.com/bashidogames/gevm/cmd/gevm/version"
-	"github.com/bashidogames/gevm/cmd/gevm/versions"
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/logging"
+	"github.com/bashmills/gevm"
+	"github.com/bashmills/gevm/cmd/gevm/cache"
+	"github.com/bashmills/gevm/cmd/gevm/exporttemplates"
+	"github.com/bashmills/gevm/cmd/gevm/godot"
+	"github.com/bashmills/gevm/cmd/gevm/settings"
+	"github.com/bashmills/gevm/cmd/gevm/version"
+	"github.com/bashmills/gevm/cmd/gevm/versions"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/logging"
 )
 
 var CLI struct {

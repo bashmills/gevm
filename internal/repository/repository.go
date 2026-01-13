@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/bashidogames/gevm/internal/platform"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm/internal/platform"
+	"github.com/bashmills/gevm/semver"
 )
 
 type Download struct {

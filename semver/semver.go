@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"slices"
 
-	"github.com/bashidogames/gevm/internal/utils"
+	"github.com/bashmills/gevm/internal/utils"
 )
 
 const VERSION_REGEX_PATTERN = "([1-9][0-9]*|0)[.]([1-9][0-9]*|0)([.]([1-9][0-9]*|0))?([.]([1-9][0-9]*|0))?"

@@ -13,7 +13,7 @@ Welcome to the repository for Godot Engine Version Manager! This tool is built u
 
 ### Windows
 
-1. Download the latest installer from the latest release page [here](https://github.com/bashidogames/gevm/releases/latest).
+1. Download the latest installer from the latest release page [here](https://github.com/bashmills/gevm/releases/latest).
 2. Run the installer.
 3. Follow the on screen instructions.
 
@@ -22,7 +22,7 @@ Welcome to the repository for Godot Engine Version Manager! This tool is built u
 You can use the very basic helper install script to download and install the binary:
 
 ```
-curl -o- https://raw.githubusercontent.com/bashidogames/gevm/master/install.sh | bash
+curl -o- https://raw.githubusercontent.com/bashmills/gevm/master/install.sh | bash
 ```
 
 You will need to make sure `~/.local/bin` is in your `PATH` environment variable:

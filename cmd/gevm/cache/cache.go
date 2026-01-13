@@ -3,7 +3,7 @@ package cache
 import (
 	"fmt"
 
-	"github.com/bashidogames/gevm"
+	"github.com/bashmills/gevm"
 )
 
 type Clear struct{}

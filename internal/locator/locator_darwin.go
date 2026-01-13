@@ -4,9 +4,9 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/utils"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/utils"
+	"github.com/bashmills/gevm/semver"
 )
 
 const EXECUTABLE_REGEX_PATTERN = "Godot(.*?)[.]app"

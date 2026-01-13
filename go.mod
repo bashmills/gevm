@@ -1,4 +1,4 @@
-module github.com/bashidogames/gevm
+module github.com/bashmills/gevm
 
 go 1.22.4
 

@@ -51,7 +51,7 @@ To contribute follow these steps:
 1. Clone the repository to your local machine:
 
    ```
-   git clone https://github.com/bashidogames/gevm.git
+   git clone https://github.com/bashmills/gevm.git
    ```
 
 2. Create a new branch for your feature or bug fix:  
@@ -66,13 +66,13 @@ To contribute follow these steps:
    git commit -m "Add new feature"
    ```
 
-4. Push your changes to the `bashidogames/gevm` repository:  
+4. Push your changes to the `bashmills/gevm` repository:  
 
    ```
    git push origin feature/new-feature
    ```
 
-5. Open a pull request from your branch to the `main` branch of the `bashidogames/gevm` repository.
+5. Open a pull request from your branch to the `main` branch of the `bashmills/gevm` repository.
 
 6. Your pull request will be reviewed and once approved it will be merged into the `main` branch.
 

@@ -6,12 +6,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/archiving"
-	"github.com/bashidogames/gevm/internal/downloading"
-	"github.com/bashidogames/gevm/internal/environment"
-	"github.com/bashidogames/gevm/internal/utils"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/archiving"
+	"github.com/bashmills/gevm/internal/downloading"
+	"github.com/bashmills/gevm/internal/environment"
+	"github.com/bashmills/gevm/internal/utils"
+	"github.com/bashmills/gevm/semver"
 	"github.com/jedib0t/go-pretty/v6/table"
 )
 

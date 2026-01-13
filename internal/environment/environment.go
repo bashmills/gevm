@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/bashidogames/gevm/config"
-	"github.com/bashidogames/gevm/internal/downloading"
-	"github.com/bashidogames/gevm/internal/environment/fetcher"
-	"github.com/bashidogames/gevm/internal/platform"
-	"github.com/bashidogames/gevm/internal/repository"
-	"github.com/bashidogames/gevm/semver"
+	"github.com/bashmills/gevm/config"
+	"github.com/bashmills/gevm/internal/downloading"
+	"github.com/bashmills/gevm/internal/environment/fetcher"
+	"github.com/bashmills/gevm/internal/platform"
+	"github.com/bashmills/gevm/internal/repository"
+	"github.com/bashmills/gevm/semver"
 )
 
 type Environment struct {
