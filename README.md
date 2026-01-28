@@ -11,13 +11,7 @@ Welcome to the repository for Godot Engine Version Manager! This tool is built u
 
 ## Installation
 
-### Windows
-
-1. Download the latest installer from the latest release page [here](https://github.com/bashmills/gevm/releases/latest).
-2. Run the installer.
-3. Follow the on screen instructions.
-
-### Linux
+### Linux / Mac
 
 You can use the very basic helper install script to download and install the binary:
 
@@ -31,9 +25,11 @@ You will need to make sure `~/.local/bin` is in your `PATH` environment variable
 export PATH="~/.local/bin:$PATH"
 ```
 
-### Mac
+### Windows
 
-See installation for linux above.
+1. Download the latest installer from the latest release page [here](https://github.com/bashmills/gevm/releases/latest).
+2. Run the installer.
+3. Follow the on screen instructions.
 
 ### Manual
 
@@ -143,23 +139,19 @@ gevm godot clear
 gevm cache clear
 ```
 
-### Windows
+### Linux / Mac
 
-1. Open `Settings -> Apps -> Installed Apps` or search for `Add or remove programs` in the start menu.
-2. Look for `Godot Engine Version Manager (gevm)` and uninstall.
-3. Follow the on screen instructions.
-
-### Linux
-
-You can uninstall on Linux by just removing the binary:
+You can uninstall by just removing the binary:
 
 ```
 rm ~/.local/bin/gevm
 ```
 
-### Mac
+### Windows
 
-See uninstallation for linux above.
+1. Open `Settings -> Apps -> Installed Apps` or search for `Add or remove programs` in the start menu.
+2. Look for `Godot Engine Version Manager (gevm)` and uninstall.
+3. Follow the on screen instructions.
 
 ## Contributing
 
