@@ -44,37 +44,71 @@ Before you begin, ensure you have the following prerequisites installed:
    go version
    ```
 
-## Making changes
+## Making Changes
 
 To contribute follow these steps:
 
-1. Clone the repository to your local machine:
+1. Fork the repository to your own GitHub account using the **Fork** button.
+
+2. Clone your fork to your local machine:
 
    ```
-   git clone https://github.com/bashmills/gevm.git
+   git clone https://github.com/<your-username>/gevm.git
    ```
 
-2. Create a new branch for your feature or bug fix:  
+3. Change into the project directory:
+
+   ```
+   cd gevm
+   ```
+
+4. Add the original repository as an upstream remote:
+
+   ```
+   git remote add upstream https://github.com/bashmills/gevm.git
+   ```
+
+5. Create a new branch for your feature or bug fix:
 
    ```
    git checkout -b feature/new-feature
    ```
 
-3. Make your changes and commit them:  
+6. Make your changes and commit them:
 
    ```
    git commit -m "Add new feature"
    ```
 
-4. Push your changes to the `bashmills/gevm` repository:  
+7. Push your changes to your fork:
 
    ```
    git push origin feature/new-feature
    ```
 
-5. Open a pull request from your branch to the `main` branch of the `bashmills/gevm` repository.
+8. Deal with merge conflicts:
 
-6. Your pull request will be reviewed and once approved it will be merged into the `main` branch.
+    1. Rebase your branch onto the latest `main` branch from upstream (preferred over merge):
+
+       ```
+       git pull --rebase upstream main
+       ```
+
+    2. Resolve conflicts and continue the rebase until success:
+
+       ```
+       git rebase --continue
+       ```
+
+    3. Force push the changes after rebasing:
+
+       ```
+       git push --force-with-lease
+       ```
+
+9. Open a pull request from your forked repository’s branch to the `main` branch of the `bashmills/gevm` repository.
+
+10. Your pull request will be reviewed and once approved it will be merged into the `main` branch.
 
 ## Deployment
 
