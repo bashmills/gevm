@@ -14,18 +14,22 @@ Before you begin, ensure you have the following prerequisites installed:
 
 - [Go v1.22.4](https://go.dev/dl/)
 
-### Installing Go via gobrew
+### Installing Go via vfox
 
-1. **Install gobrew:**
+1. **Install vfox:**
 
-   Download the latest version of gobrew by following the instructions found [here](https://github.com/kevincobain2000/gobrew).
+   Download the latest version of vfox by following the instructions found [here](https://vfox.dev/guides/quick-start.html) and add the golang plugin:
+
+   ```
+   vfox add golang
+   ```
 
 2. **Install Go:**
 
-   Once gobrew is installed, open the terminal and run the following command to install Go version 1.22.4:
+   Once vfox is installed, open the terminal and run the following command to install Go version 1.22.4:
 
    ```
-   gobrew install 1.22.4
+   vfox install golang@1.22.4
    ```
 
 3. **Set Go version:**
@@ -33,7 +37,7 @@ Before you begin, ensure you have the following prerequisites installed:
    After installing Go, you can set it as the default version:
 
    ```
-   gobrew use 1.22.4
+   vfox use -g golang@1.22.4
    ```
 
 4. **Verify installation:**
